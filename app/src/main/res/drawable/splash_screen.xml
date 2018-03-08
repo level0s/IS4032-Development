@@ -2,9 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/colorsplashscreen" />
 
-    <item>
+    <item android:width="200dp" android:height="200dp" android:gravity="center">
         <bitmap
-            android:gravity="center"
-            android:src="@mipmap/logo" />
+
+            android:src="@mipmap/logo"
+
+          />
     </item>
 </layer-list>
