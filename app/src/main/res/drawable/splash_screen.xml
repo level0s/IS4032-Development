@@ -4,9 +4,7 @@
 
     <item android:width="200dp" android:height="200dp" android:gravity="center">
         <bitmap
-
             android:src="@mipmap/logo"
-
           />
     </item>
 </layer-list>
