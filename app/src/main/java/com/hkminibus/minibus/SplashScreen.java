@@ -1,8 +1,6 @@
 package com.hkminibus.minibus;
 
-/**
- * Created by fucheuk on 4/3/2018.
- */
+
 
 
 import android.content.Intent;
@@ -17,7 +15,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Start home activity
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        startActivity(new Intent(SplashScreen.this, SearchByMap.class));
         // close splash activity
         finish();
     }

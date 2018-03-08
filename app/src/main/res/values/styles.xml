@@ -11,6 +11,6 @@
     colorBackground affects not only the background of the main window but also of all components
     e.g. dialogs unless you override it in the component layout.-->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:windowBackground">@drawable/splash_screen </item>
     </style>
 </resources>
