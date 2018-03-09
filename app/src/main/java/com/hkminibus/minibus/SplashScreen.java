@@ -5,7 +5,6 @@ package com.hkminibus.minibus;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 
 
@@ -15,7 +14,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Start home activity
-        startActivity(new Intent(SplashScreen.this, SearchByMap.class));
+        startActivity(new Intent(SplashScreen.this, test.class));
         // close splash activity
         finish();
     }

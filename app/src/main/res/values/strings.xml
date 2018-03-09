@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Minibus+</string>
     <string name="title_activity_search_by_map">SearchByMap</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

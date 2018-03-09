@@ -9,9 +9,11 @@
     -->
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- label= name display in the android, supportsRtl = right to left layout for APIs higher than 17, 
+
+    <!--
+     label= name display in the android, supportsRtl = right to left layout for APIs higher than 17, 
          theme = style.xml 
-     -->
+    -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -30,20 +32,24 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
-                <intent-filter>
-                    <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                    <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <activity
             android:name=".SearchByMap"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
+        <activity
+            android:name=".test"
+            android:label="Minibus+" />
+
     </application>
 
 </manifest>
