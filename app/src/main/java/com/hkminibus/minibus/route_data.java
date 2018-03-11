@@ -6,7 +6,7 @@ public class route_data {
 
     public route_data(String mRouteNo, String mRouteName) {
         this.mRouteNo = mRouteNo;
-        this.mRouteName = mRouteNo;
+        this.mRouteName = mRouteName;
     }
 
     public String getmRouteNo() {
