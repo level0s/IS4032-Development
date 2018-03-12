@@ -48,7 +48,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
                     mContext.startActivity(mIntent);
                 }
              });*/
-
     }
 
     @Override
