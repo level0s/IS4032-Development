@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -31,6 +34,8 @@ public class search_by_no extends Fragment {
         View view =  inflater.inflate(R.layout.search_by_no_fragment, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
+        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         /*route_data mRoute = new route_data("81", "Tsuen Wan to Shek Wai Kok");
@@ -49,19 +54,29 @@ public class search_by_no extends Fragment {
         mRecyclerView.setAdapter(mRouteAdapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference mRef = database.getReference("路線");
+        DatabaseReference mRef = database.getReference("Route");
 
-        mRef.addValueEventListener(new ValueEventListener() {
+       //this is for sorting by number when we tend to use the distance base should change it
+        Query query = mRef.orderByChild("mRouteNo");
+
+
+        query.addValueEventListener(new ValueEventListener() {
+
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mRouteData.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren() ){
                    route_data mRoute = ds.getValue(route_data.class);
+
                   //  route_data mRoute = new route_data("81", "Tsuen Wan to Shek Wai Kok");
                     mRouteData.add(mRoute);
 
+
                 }
+
                 mRouteAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -70,9 +85,7 @@ public class search_by_no extends Fragment {
             }
         });
 
-
         return view;
-
 
     }
 
