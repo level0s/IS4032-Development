@@ -35,8 +35,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
 
     @Override
     public void onBindViewHolder(final RouteViewHolder holder, int position) {
-        holder.mRouteNo.setText(mRouteData.get(position).getmRouteNo());
-        holder.mRouteName.setText(mRouteData.get(position).getmRouteName());
+        //holder.mRouteNo.setText(mRouteData.get(position).getmRouteNo());
+        //holder.mRouteName.setText(mRouteData.get(position).getmRouteName());
+
+        route_data mRoute = mRouteData.get(position);
+        holder.setValues(mRoute);
 
         /*Tap and go to another page
                 holder.mLayout.setOnClickListener(new View.OnClickListener() {
@@ -56,17 +59,24 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
     }
 }
 
+//no public and final before luke change
+
 class RouteViewHolder extends RecyclerView.ViewHolder {
 
-    TextView mRouteNo;
-    TextView mRouteName;
+    final TextView mRouteNo;
+    final TextView mRouteName;
     RelativeLayout mLayout;
 
     RouteViewHolder(View itemView) {
         super(itemView);
-
         mRouteNo = (TextView) itemView.findViewById(R.id.route_no);
         mRouteName = (TextView) itemView.findViewById(R.id.route_name);
+
+    }
+
+    public void setValues(route_data mRouteData) {
+        mRouteName.setText(mRouteData.getmRouteName());
+        mRouteNo.setText(mRouteData.getmRouteNo());
 
     }
 }

@@ -9,8 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
@@ -26,7 +33,7 @@ public class search_by_no extends Fragment {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        route_data mRoute = new route_data("81", "Tsuen Wan to Shek Wai Kok");
+        /*route_data mRoute = new route_data("81", "Tsuen Wan to Shek Wai Kok");
         mRouteData.add(mRoute);
         mRoute = new route_data("94", "Shek Wai Kok to Kwai Fong");
         mRouteData.add(mRoute);
@@ -37,12 +44,38 @@ public class search_by_no extends Fragment {
         mRoute = new route_data("409S", "Tsuen Wan to Tsing Yi");
         mRouteData.add(mRoute);
         mRoute = new route_data("95m", "Tsuen Wan to Tsuen Wan Centre");
-        mRouteData.add(mRoute);
-
-        RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
+        mRouteData.add(mRoute);*/
+        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference mRef = database.getReference("路線");
+
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mRouteData.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                   route_data mRoute = ds.getValue(route_data.class);
+                  //  route_data mRoute = new route_data("81", "Tsuen Wan to Shek Wai Kok");
+                    mRouteData.add(mRoute);
+
+                }
+                mRouteAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         return view;
+
+
     }
 
 
 }
+
