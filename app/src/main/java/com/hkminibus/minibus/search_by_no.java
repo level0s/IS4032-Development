@@ -121,7 +121,7 @@ public class search_by_no extends Fragment {
                     Log.d("dd","have");
                 } else {
                     filter(tempText);
-                    mRecyclerView.invalidate();
+                    mRouteAdapter.notifyDataSetChanged();
                 }
 
 
@@ -154,12 +154,12 @@ public class search_by_no extends Fragment {
 
 
         //calling a method of the adapter class and passing the filtered list
-        mLinearLayoutManager.removeAllViews();
+        //mLinearLayoutManager.removeAllViews();
         //mRouteAdapter.filterList(mRouteData);
 
 
 
-        mRouteAdapter.notifyDataSetChanged();
+        //mRouteAdapter.notifyDataSetChanged();
     }
 
 
