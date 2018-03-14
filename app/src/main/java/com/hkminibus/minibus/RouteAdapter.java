@@ -6,17 +6,20 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
+public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHolder> {
 
     private List<route_data> mRouteData;
     private Context mContext;
@@ -57,26 +60,40 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteViewHolder> {
     public int getItemCount() {
         return mRouteData.size();
     }
-}
 
-//no public and final before luke change
 
-class RouteViewHolder extends RecyclerView.ViewHolder {
+    //This method will filter the list
+    //here we are passing the filtered data
+    //and assigning it to the list with notifydatasetchanged method
+    /*public void filterList(List<route_data> filterdNames) {
 
-    final TextView mRouteNo;
-    final TextView mRouteName;
-    RelativeLayout mLayout;
+        notifyDataSetChanged();
 
-    RouteViewHolder(View itemView) {
-        super(itemView);
-        mRouteNo = (TextView) itemView.findViewById(R.id.route_no);
-        mRouteName = (TextView) itemView.findViewById(R.id.route_name);
 
-    }
+        Log.d("", "Herewego4");
+    }*/
+//}
 
-    public void setValues(route_data mRouteData) {
-        mRouteName.setText(mRouteData.getmRouteName());
-        mRouteNo.setText(mRouteData.getmRouteNo());
+    //no public and final before luke change
+    class RouteViewHolder extends RecyclerView.ViewHolder {
 
+        TextView mRouteNo;
+        TextView mRouteName;
+
+        RelativeLayout mLayout;
+
+        RouteViewHolder(View itemView) {
+            super(itemView);
+            mRouteNo = (TextView) itemView.findViewById(R.id.route_no);
+            mRouteName = (TextView) itemView.findViewById(R.id.route_name);
+
+
+        }
+
+        public void setValues(route_data mRouteData) {
+            mRouteName.setText(mRouteData.getmRouteName());
+            mRouteNo.setText(mRouteData.getmRouteNo());
+
+        }
     }
 }
