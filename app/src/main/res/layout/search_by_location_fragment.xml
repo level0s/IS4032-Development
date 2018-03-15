@@ -10,27 +10,58 @@
         android:id="@+id/editText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="textCapCharacters"
         android:singleLine="true"
-        android:text="No it's not the task this week"
+        android:text="選擇起點"
         app:layout_constraintEnd_toStartOf="@+id/imageButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        tools:layout_editor_absoluteY="19dp" />
 
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText"
         app:layout_constraintTop_toTopOf="@+id/editText"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/places_ic_search" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="起點："
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="終點："
+        app:layout_constraintBottom_toBottomOf="@+id/editText2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText2" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="選擇目的地"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
 
 </android.support.constraint.ConstraintLayout>
