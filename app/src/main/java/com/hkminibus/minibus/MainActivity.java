@@ -17,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         TabLayout.OnTabSelectedListener{
@@ -51,10 +54,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return null;
             }
 
+
             @Override
             public int getCount() {
                 return 2;
             }
+
         });
 
     }

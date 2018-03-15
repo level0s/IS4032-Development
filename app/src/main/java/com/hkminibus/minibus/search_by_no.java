@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.text.TextWatcher;
 import android.widget.Scroller;
 import android.widget.TextView;
+import android.content.Context;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,11 +55,16 @@ public class search_by_no extends Fragment {
         //setContentView(R.layout.activity_main);
         View view =  inflater.inflate(R.layout.search_by_no_fragment, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
+
+
         editText = (EditText) view.findViewById(R.id.editText);
+
 
         //mLinearLayoutManager.setReverseLayout(true);
         //mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
+
 
         final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
@@ -68,6 +74,8 @@ public class search_by_no extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mRouteData.clear();
+                allRouteData.clear();
 
                 for (DataSnapshot ds : dataSnapshot.getChildren() ){
                    route_data mRoute = ds.getValue(route_data.class);
@@ -143,7 +151,7 @@ public class search_by_no extends Fragment {
 
         for (route_data s : allRouteData) {
             //if the existing elements contains the search input
-            if (s.getmRouteNo().contains(text) || s.getmRouteName().contains(text)) {
+            if (s.getmRouteNo().contains(text.toString().toUpperCase()) || s.getmRouteName().contains(text.toString().toUpperCase())) {
 
                 //adding the element to filtered list
                 mRouteData.add(s);

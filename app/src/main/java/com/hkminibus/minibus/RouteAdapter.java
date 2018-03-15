@@ -28,14 +28,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         this.mRouteData = mRouteData;
         this.mContext = mContext;
     }
-
+    //创建ChildView
     @Override
     public RouteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_route,
+        View view = LayoutInflater.from(mContext).inflate(R.layout.recycleview_route,
                 parent, false);
         return new RouteViewHolder(view);
     }
 
+    //将数据绑定到每一个childView中
     @Override
     public void onBindViewHolder(final RouteViewHolder holder, int position) {
         //holder.mRouteNo.setText(mRouteData.get(position).getmRouteNo());
@@ -56,6 +57,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
              });*/
     }
 
+    //得到child的数量
     @Override
     public int getItemCount() {
         return mRouteData.size();
