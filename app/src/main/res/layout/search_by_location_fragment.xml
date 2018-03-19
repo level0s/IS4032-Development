@@ -73,6 +73,7 @@ w
         app:layout_constraintBottom_toBottomOf="@id/editText2"
         app:layout_constraintTop_toTopOf="@id/route_list"
         tools:context="com.hkminibus.minibus.Search_by_location" />
+
     
     <android.support.v7.widget.RecyclerView
         android:id="@+id/route_list"

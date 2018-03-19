@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.INotificationSideChannel;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.WindowManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +43,7 @@ import java.util.List;
 
 public class search_by_location extends Fragment implements OnMapReadyCallback{
     private static final String TAG="SearchByLocation";
+    private boolean isFulllScreen = false;
 
     RecyclerView mRecyclerView;
     List<route_data> mRouteData = new ArrayList<>();
@@ -55,13 +57,14 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference mRef = database.getReference("Route");
 
-    private MapView gMapView;
+
     private GoogleMap gMap;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //setContentView(R.layout.activity_main);
         View view =  inflater.inflate(R.layout.search_by_location_fragment, container, false);
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
@@ -149,8 +152,8 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             }
         });
 
-        //mLinearLayoutManager.setReverseLayout(true);
-        //mLinearLayoutManager.setStackFromEnd(true);
+
+
         return view;
     }
 
@@ -191,6 +194,23 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
         LatLng sydney = new LatLng(-34, 151);
         gMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         gMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
+                ViewGroup.LayoutParams params = mapFragment.getView().getLayoutParams();
+                params.height = 900;
+                mapFragment.getView().setLayoutParams(params);
+                Log.d("testclick","googlemap");
+            }
+        });
+
     }
+
+
+
+
+
+
 }
 

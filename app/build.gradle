@@ -1,9 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyPassword 'minibus'
+            storeFile file('/Users/fucheuk/Desktop/androidkey1')
+            storePassword 'minibus'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '26.0.2'
-
     defaultConfig {
         applicationId "com.hkminibus.minibus"
         minSdkVersion 23
@@ -16,6 +22,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 }
