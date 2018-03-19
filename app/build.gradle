@@ -4,7 +4,14 @@ android {
     signingConfigs {
         config {
             keyPassword 'minibus'
-            storeFile file('/Users/fucheuk/Desktop/androidkey1')
+            storeFile file('/Users/fucheuk/AndroidStudioProjects/IS4032-Development/keystores/androidkey1')
+            storePassword 'minibus'
+            keyAlias 'key0'
+        }
+        minibus {
+            keyAlias 'key0'
+            keyPassword 'minibus'
+            storeFile file('/Users/fucheuk/AndroidStudioProjects/IS4032-Development/keystores/Minibus.jks')
             storePassword 'minibus'
         }
     }
@@ -22,10 +29,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.minibus
         }
         debug {
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.minibus
         }
     }
 }
