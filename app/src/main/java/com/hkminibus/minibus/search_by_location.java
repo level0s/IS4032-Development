@@ -21,6 +21,7 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
+import android.widget.ImageButton;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
     List<route_data> allRouteData = new ArrayList<>();
     EditText editStart;
     EditText editEnd;
-    Button searchButton;
+    ImageButton searchButton;
     String Start;
     String End;
     ArrayList allDistrict = new ArrayList();
@@ -85,7 +86,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
 
         editStart = (EditText) view.findViewById(R.id.editStart);
         editEnd = (EditText) view.findViewById(R.id.editEnd);
-        //searchButton = (Button) view.findViewById(R.id.searchButton);  //fml
+        searchButton = (ImageButton) view.findViewById(R.id.searchButton);
 
         //mLinearLayoutManager.setReverseLayout(true);
         //mLinearLayoutManager.setStackFromEnd(true);
@@ -205,7 +206,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
                         builder.setItems((CharSequence[]) eDistrict.toArray(new String[eDistrict.size()]),new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                End = (String) eDistrict.get(which); //fml
+                                End = (String) eDistrict.get(which);
                                 editEnd.setText(End);
                             }
                         });}
@@ -218,7 +219,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             }
         });
 
-        /*final Query routeQuery = mRef.orderByChild("mRouteNo");
+        final Query routeQuery = mRef.orderByChild("mRouteNo");
         routeQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -232,7 +233,6 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
 
                 }
                 mRouteData.addAll(allRouteData);
-                Log.d("aaaa", "ddddd");
                 mRouteAdapter.notifyDataSetChanged();
             }
             @Override
@@ -244,11 +244,12 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
         searchButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
+                searchButton.setFocusableInTouchMode(true);
                 mRouteData.clear();
                 //Perform search in DB with Start and End, add into mRouteData
                 mRouteAdapter.notifyDataSetChanged();
             }
-        });*/
+        });
 
         return view;
     }
