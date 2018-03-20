@@ -1,5 +1,8 @@
 package com.hkminibus.minibus;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,11 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.MapView;
 import com.google.firebase.database.DataSnapshot;
@@ -47,16 +52,22 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
 
     RecyclerView mRecyclerView;
     List<route_data> mRouteData = new ArrayList<>();
-
     List<route_data> allRouteData = new ArrayList<>();
-    EditText editText;
+    EditText editStart;
+    EditText editEnd;
+    Button searchButton;
+    String Start;
+    String End;
+    ArrayList allDistrict = new ArrayList();
+    ArrayList sDistrict = new ArrayList();
+    ArrayList eDistrict = new ArrayList();
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
 
-
+    RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference refDistrict = database.getReference("District");
     DatabaseReference mRef = database.getReference("Route");
-
 
     private GoogleMap gMap;
 
@@ -72,8 +83,9 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
 
 
-        editText = (EditText) view.findViewById(R.id.editText);
-
+        editStart = (EditText) view.findViewById(R.id.editStart);
+        editEnd = (EditText) view.findViewById(R.id.editEnd);
+        //searchButton = (Button) view.findViewById(R.id.searchButton);  //fml
 
         //mLinearLayoutManager.setReverseLayout(true);
         //mLinearLayoutManager.setStackFromEnd(true);
@@ -85,97 +97,162 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
         mRecyclerView.setAdapter(mRouteAdapter);
 
 
-        final Query query = mRef.orderByChild("mRouteNo");
-        query.addValueEventListener(new ValueEventListener() {
+        final Query districtQuery = refDistrict;
+        districtQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                sDistrict.clear();
+                eDistrict.clear();
+                allDistrict.clear();
+
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    allDistrict.add(ds.getValue());
+                }
+                sDistrict.addAll(allDistrict);
+                eDistrict.addAll(allDistrict);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        editStart.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String tempStart = editable.toString();
+                if (tempStart.matches("")) {
+                    //default: start=current location
+                    sDistrict.clear();
+                    sDistrict.add("Current location");
+                } else {
+                    //add filtered locatioins to array
+                    sDistrict.clear();
+                    for (Object d : allDistrict) {
+                        //if the existing elements contains the search input
+                        if (d.toString().contains(tempStart)) {
+                            sDistrict.add(d);
+                        }
+                    }
+                }
+            }
+        });
+        editStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("請選擇起點");
+                    if (sDistrict.isEmpty()){
+                        builder.setMessage("找不到地點");
+                    } else {
+                        builder.setItems((CharSequence[]) sDistrict.toArray(new String[sDistrict.size()]),new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                           Start = (String)sDistrict.get(which);
+                           editStart.setText(Start);
+                        }
+                    });}
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+        });
+
+        editEnd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String tempEnd = editable.toString();
+                if (tempEnd.matches("")) {
+                    eDistrict.clear();
+                    eDistrict.addAll(allDistrict);
+                } else {
+                    //add filtered locatioins to array
+                    eDistrict.clear();
+                    for (Object d : allDistrict) {
+                        //if the existing elements contains the search input
+                        if (d.toString().contains(tempEnd)) {
+                            eDistrict.add(d);
+                        }
+                    }
+                }
+            }
+        });
+        editEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("請選擇目的地");
+                    if (eDistrict.isEmpty()){
+                        builder.setMessage("找不到地點");
+                    } else {
+                        builder.setItems((CharSequence[]) eDistrict.toArray(new String[eDistrict.size()]),new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                End = (String) eDistrict.get(which); //fml
+                                editEnd.setText(End);
+                            }
+                        });}
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+                    builder.show();
+                }
+            }
+        });
+
+        /*final Query routeQuery = mRef.orderByChild("mRouteNo");
+        routeQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mRouteData.clear();
                 allRouteData.clear();
 
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     route_data mRoute = ds.getValue(route_data.class);
 
                     allRouteData.add(mRoute);
 
                 }
                 mRouteData.addAll(allRouteData);
-                Log.d("aaaa","ddddd");
+                Log.d("aaaa", "ddddd");
                 mRouteAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
 
-        editText.addTextChangedListener(new TextWatcher() {
-
+        searchButton.setOnClickListener(new Button.OnClickListener(){
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            public void onClick(View v) {
+                mRouteData.clear();
+                //Perform search in DB with Start and End, add into mRouteData
+                mRouteAdapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /*String tempText = charSequence.toString();
-
-
-                if (tempText.matches("")) {
-                    mRouteData.clear();
-                    mRouteData.addAll(allRouteData);
-                    mRouteAdapter.notifyDataSetChanged();
-                    Log.d("dd","have");
-                } else {
-                    filter(tempText);
-                }*/
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String tempText = editable.toString();
-
-
-                if (tempText.matches("")) {
-                    mRouteData.clear();
-                    mRouteData.addAll(allRouteData);
-                    mRouteAdapter.notifyDataSetChanged();
-                    Log.d("dd","have");
-                } else {
-                    filter(tempText);
-                    mRouteAdapter.notifyDataSetChanged();
-                }
-
-
-
-            }
-        });
-
-
+        });*/
 
         return view;
     }
 
-    private void filter(String text) {
-        //new array list that will hold the filtered data
-
-
-        //looping through existing elements
-        mRouteData.clear();
-
-        for (route_data s : allRouteData) {
-            //if the existing elements contains the search input
-            if (s.getmRouteNo().contains(text.toString().toUpperCase()) || s.getmRouteName().contains(text.toString().toUpperCase())) {
-
-                //adding the element to filtered list
-                mRouteData.add(s);
-
-            }
-            Log.d("ddddd","visited");
-        }
-
-    }
 
     /**
      * Manipulates the map once available.
@@ -206,8 +283,6 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
         });
 
     }
-
-
 
 
 
