@@ -36,13 +36,12 @@ public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
 
     RecyclerView mRecyclerView;
-    List<route_data> mRouteData = new ArrayList<>();
-    List<route_data> filterdNames = new ArrayList<>();
-    List<route_data> allRouteData = new ArrayList<>();
+    //List<route_data> mRouteData = new ArrayList<>();
+    //List<route_data> allRouteData = new ArrayList<>();
     EditText editText;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
 
-    RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
+    //RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference mRef = database.getReference("Route");
@@ -66,33 +65,8 @@ public class search_by_no extends Fragment {
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
 
-        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
+        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
-
-
-        final Query query = mRef.orderByChild("mRouteNo");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mRouteData.clear();
-                allRouteData.clear();
-
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
-                   route_data mRoute = ds.getValue(route_data.class);
-
-                   allRouteData.add(mRoute);
-
-                }
-                mRouteData.addAll(allRouteData);
-                Log.d("aaaa","ddddd");
-                mRouteAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         editText.addTextChangedListener(new TextWatcher() {
 
@@ -123,8 +97,8 @@ public class search_by_no extends Fragment {
 
 
                 if (tempText.matches("")) {
-                    mRouteData.clear();
-                    mRouteData.addAll(allRouteData);
+                    MainActivity.mRouteData.clear();
+                    MainActivity.mRouteData.addAll(MainActivity.allRouteData);
                     mRouteAdapter.notifyDataSetChanged();
                     Log.d("dd","have");
                 } else {
@@ -147,14 +121,14 @@ public class search_by_no extends Fragment {
 
 
         //looping through existing elements
-        mRouteData.clear();
+        MainActivity.mRouteData.clear();
 
-        for (route_data s : allRouteData) {
+        for (route_data s : MainActivity.allRouteData) {
             //if the existing elements contains the search input
             if (s.getmRouteNo().contains(text.toString().toUpperCase()) || s.getmRouteName().contains(text.toString().toUpperCase())) {
 
                 //adding the element to filtered list
-                mRouteData.add(s);
+                MainActivity.mRouteData.add(s);
 
             }
             Log.d("ddddd","visited");

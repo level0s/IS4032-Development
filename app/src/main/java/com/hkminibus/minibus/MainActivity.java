@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +21,15 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         TabLayout.OnTabSelectedListener{
@@ -30,6 +39,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private search_by_no fragment1 = new search_by_no();
     private search_by_location fragment2 = new search_by_location();
+
+    public static List<route_data> mRouteData = new ArrayList<>();
+    public static List<route_data> allRouteData = new ArrayList<>();
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mRef = database.getReference();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +70,31 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return null;
             }
 
-
             @Override
             public int getCount() {
                 return 2;
             }
-
         });
 
+        final Query Query = mRef.child("Route").orderByChild("mRouteNo");
+        Query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mRouteData.clear();
+                allRouteData.clear();
+
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    route_data mRoute = ds.getValue(route_data.class);
+                    allRouteData.add(mRoute);
+                }
+                mRouteData.addAll(allRouteData);
+                Log.d("aaaa","ddddd");
+                //mRouteAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     @Override
@@ -69,21 +102,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         //TabLayout里的TabItem被选中的时候触发
         viewPager.setCurrentItem(tab.getPosition());
     }
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {}
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
+    public void onTabReselected(TabLayout.Tab tab) {}
 
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
     @Override
     public void onPageSelected(int position) {
@@ -92,9 +118,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    public void onPageScrollStateChanged(int state) {}
 
-    }
 
-    
 }
