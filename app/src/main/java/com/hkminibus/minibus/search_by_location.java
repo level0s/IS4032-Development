@@ -52,23 +52,23 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
     private boolean isFulllScreen = false;
 
     RecyclerView mRecyclerView;
-    List<route_data> mRouteData = new ArrayList<>();
-    List<route_data> allRouteData = new ArrayList<>();
+    //List<route_data> mRouteData = new ArrayList<>();
+    //List<route_data> allRouteData = new ArrayList<>();
     EditText editStart;
     EditText editEnd;
     ImageButton searchButton;
     String Start;
     String End;
-    ArrayList allDistrict = new ArrayList();
-    ArrayList sDistrict = new ArrayList();
-    ArrayList eDistrict = new ArrayList();
+    //ArrayList allDistrict = new ArrayList();
+    ArrayList startLocation = new ArrayList();
+    ArrayList endLocation = new ArrayList();
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
 
-    RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
+    RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference refDistrict = database.getReference("District");
-    DatabaseReference mRef = database.getReference("Route");
+    //FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //DatabaseReference refDistrict = database.getReference("District");
+    //DatabaseReference mRef = database.getReference("Route");
 
     private GoogleMap gMap;
 
@@ -94,11 +94,11 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
 
-        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
+        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
 
 
-        final Query districtQuery = refDistrict;
+        /*final Query districtQuery = refDistrict;
         districtQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -116,8 +116,11 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        });*/
 
+        startLocation.add("Current Location");
+        startLocation.addAll(MainActivity.allDistrict);
+        startLocation.addAll(MainActivity.allLandmark);
         editStart.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -130,15 +133,21 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
                 String tempStart = editable.toString();
                 if (tempStart.matches("")) {
                     //default: start=current location
-                    sDistrict.clear();
-                    sDistrict.add("Current location");
+                    startLocation.clear();
+                    startLocation.add("Current location");
+                    startLocation.addAll(MainActivity.allDistrict);
+                    startLocation.addAll(MainActivity.allLandmark);
                 } else {
                     //add filtered locatioins to array
-                    sDistrict.clear();
-                    for (Object d : allDistrict) {
-                        //if the existing elements contains the search input
+                    startLocation.clear();
+                    for (Object d : MainActivity.allDistrict) {
                         if (d.toString().contains(tempStart)) {
-                            sDistrict.add(d);
+                            startLocation.add(d);
+                        }
+                    }
+                    for (Object k : MainActivity.allLandmark) {
+                        if (k.toString().contains(tempStart)) {
+                            startLocation.add(k);
                         }
                     }
                 }
@@ -150,13 +159,13 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
                 if (!hasFocus) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("請選擇起點");
-                    if (sDistrict.isEmpty()){
+                    if (startLocation.isEmpty()){
                         builder.setMessage("找不到地點");
                     } else {
-                        builder.setItems((CharSequence[]) sDistrict.toArray(new String[sDistrict.size()]),new DialogInterface.OnClickListener() {
+                        builder.setItems((CharSequence[]) startLocation.toArray(new String[startLocation.size()]),new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                           Start = (String)sDistrict.get(which);
+                           Start = (String)startLocation.get(which);
                            editStart.setText(Start);
                         }
                     });}
@@ -169,6 +178,8 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             }
         });
 
+        endLocation.addAll(MainActivity.allDistrict);
+        endLocation.addAll(MainActivity.allLandmark);
         editEnd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -180,15 +191,20 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             public void afterTextChanged(Editable editable) {
                 String tempEnd = editable.toString();
                 if (tempEnd.matches("")) {
-                    eDistrict.clear();
-                    eDistrict.addAll(allDistrict);
+                    endLocation.clear();
+                    endLocation.addAll(MainActivity.allDistrict);
+                    endLocation.addAll(MainActivity.allLandmark);
                 } else {
                     //add filtered locatioins to array
-                    eDistrict.clear();
-                    for (Object d : allDistrict) {
-                        //if the existing elements contains the search input
+                    endLocation.clear();
+                    for (Object d : MainActivity.allDistrict) {
                         if (d.toString().contains(tempEnd)) {
-                            eDistrict.add(d);
+                            endLocation.add(d);
+                        }
+                    }
+                    for (Object k : MainActivity.allLandmark) {
+                        if (k.toString().contains(tempEnd)) {
+                            endLocation.add(k);
                         }
                     }
                 }
@@ -200,13 +216,13 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
                 if (!hasFocus) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("請選擇目的地");
-                    if (eDistrict.isEmpty()){
+                    if (endLocation.isEmpty()){
                         builder.setMessage("找不到地點");
                     } else {
-                        builder.setItems((CharSequence[]) eDistrict.toArray(new String[eDistrict.size()]),new DialogInterface.OnClickListener() {
+                        builder.setItems((CharSequence[]) endLocation.toArray(new String[endLocation.size()]),new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                End = (String) eDistrict.get(which);
+                                End = (String) endLocation.get(which);
                                 editEnd.setText(End);
                             }
                         });}
@@ -219,7 +235,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             }
         });
 
-        final Query routeQuery = mRef.orderByChild("mRouteNo");
+        /*final Query routeQuery = mRef.orderByChild("mRouteNo");
         routeQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -239,13 +255,13 @@ public class search_by_location extends Fragment implements OnMapReadyCallback{
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
         searchButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
                 searchButton.setFocusableInTouchMode(true);
-                mRouteData.clear();
+                MainActivity.mRouteData.clear();
                 //Perform search in DB with Start and End, add into mRouteData
                 mRouteAdapter.notifyDataSetChanged();
             }

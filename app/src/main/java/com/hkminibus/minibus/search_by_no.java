@@ -36,15 +36,9 @@ public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
 
     RecyclerView mRecyclerView;
-    //List<route_data> mRouteData = new ArrayList<>();
-    //List<route_data> allRouteData = new ArrayList<>();
     EditText editText;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
 
-    //RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteData);
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mRef = database.getReference("Route");
 
 
     @Nullable

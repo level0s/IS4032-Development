@@ -34,21 +34,85 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         TabLayout.OnTabSelectedListener{
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mRef = database.getReference();
+
+    public static List<route_data> mRouteData = new ArrayList<>();
+    public static List<route_data> allRouteData = new ArrayList<>();
+    //private List<stop_data> mStopList = new ArrayList<>();
+    public static List<district_data> allDistrict = new ArrayList<>();
+    public static List<landmark_data> allLandmark = new ArrayList<>();
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
     private search_by_no fragment1 = new search_by_no();
     private search_by_location fragment2 = new search_by_location();
 
-    public static List<route_data> mRouteData = new ArrayList<>();
-    public static List<route_data> allRouteData = new ArrayList<>();
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mRef = database.getReference();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*final Query StopList = mRef.child("Stop");
+        StopList.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<stop_data> mStopList = new ArrayList<>();
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    stop_data mStop = ds.getValue(stop_data.class);
+                    mStopList.add(mStop);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });*/
+
+        final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
+        Routes.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mRouteData.clear();
+                allRouteData.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    route_data mRoute = ds.getValue(route_data.class);
+                    allRouteData.add(mRoute);
+                }
+                mRouteData.addAll(allRouteData);
+                Log.d("aaaa","ddddd");
+                //mRouteAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        //DB crushed if i added them fml
+        /*final Query Districts = mRef.child("District");
+        Districts.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                allDistrict.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    district_data mDistrict = ds.getValue(district_data.class);
+                    allDistrict.add(mDistrict);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });*/
+
+        /*final Query Landmarks = mRef.child("Landmark");
+        Landmarks.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                allLandmark.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    landmark_data mLandmark = ds.getValue(landmark_data.class);
+                    allLandmark.add(mLandmark);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });*/
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -74,26 +138,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             public int getCount() {
                 return 2;
             }
-        });
-
-        final Query Query = mRef.child("Route").orderByChild("mRouteNo");
-        Query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mRouteData.clear();
-                allRouteData.clear();
-
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
-                    route_data mRoute = ds.getValue(route_data.class);
-                    allRouteData.add(mRoute);
-                }
-                mRouteData.addAll(allRouteData);
-                Log.d("aaaa","ddddd");
-                //mRouteAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 
