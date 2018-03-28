@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public static List<route_data> mRouteData = new ArrayList<>();
     public static List<route_data> allRouteData = new ArrayList<>();
-    //private List<stop_data> mStopList = new ArrayList<>();
+    public static List<stop_data> mStopList = new ArrayList<>();
     public static List<district_data> allDistrict = new ArrayList<>();
     public static List<landmark_data> allLandmark = new ArrayList<>();
     private ViewPager viewPager;
@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*final Query StopList = mRef.child("Stop");
+
+        final Query StopList = mRef.child("Stop");
         StopList.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<stop_data> mStopList = new ArrayList<>();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren() ){
                     stop_data mStop = ds.getValue(stop_data.class);
                     mStopList.add(mStop);
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });*/
+        });
 
         final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
         Routes.addValueEventListener(new ValueEventListener() {
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     allRouteData.add(mRoute);
                 }
                 mRouteData.addAll(allRouteData);
-                Log.d("aaaa","ddddd");
+
                 //mRouteAdapter.notifyDataSetChanged();
             }
 
@@ -141,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         });
     }
 
+    public static stop_data getmStopList(stop_data mStopList){
+        return mStopList;
+    }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         //TabLayout里的TabItem被选中的时候触发

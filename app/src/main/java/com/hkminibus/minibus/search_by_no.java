@@ -45,16 +45,11 @@ public class search_by_no extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         View view =  inflater.inflate(R.layout.search_by_no_fragment, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
 
-
         editText = (EditText) view.findViewById(R.id.editText);
 
-
-        //mLinearLayoutManager.setReverseLayout(true);
-        //mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
@@ -129,13 +124,6 @@ public class search_by_no extends Fragment {
          }
 
 
-        //calling a method of the adapter class and passing the filtered list
-        //mLinearLayoutManager.removeAllViews();
-        //mRouteAdapter.filterList(mRouteData);
-
-
-
-        //mRouteAdapter.notifyDataSetChanged();
     }
 
 

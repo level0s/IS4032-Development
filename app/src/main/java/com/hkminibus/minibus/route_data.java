@@ -8,29 +8,21 @@ import java.util.List;
 public class route_data {
     private String mRouteNo;
     private String mRouteName;
-    //private ArrayList<stop_data> mStopList = new ArrayList<>();
-    /*private String 名稱;
-    private String 號碼;
-    private String 小巴種類;
-    private String 車牌;*/
+    private stop_data mStopList1;
 
-    public route_data(){}
-
-    public route_data(String mRouteNo, String mRouteName) {
+    public route_data(String mRouteNo, String mRouteName, stop_data mStopList) {
         this.mRouteNo = mRouteNo;
         this.mRouteName = mRouteName;
-        //.mStopList = mStopList;
+        this.mStopList1 = MainActivity.getmStopList(mStopList);
     }
+
+    public route_data(){}
 
     public String getmRouteNo() {
         return mRouteNo;
     }
-    public String getmRouteName() {
-        return mRouteName;
-    }
-    /*public ArrayList<stop_data> getmStopList() {
-        return mStopList;
-    }*/
+    public String getmRouteName() {return mRouteName;}
+
 
 }
 
