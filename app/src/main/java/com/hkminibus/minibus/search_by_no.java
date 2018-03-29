@@ -65,20 +65,7 @@ public class search_by_no extends Fragment {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /*String tempText = charSequence.toString();
-
-
-                if (tempText.matches("")) {
-                    mRouteData.clear();
-                    mRouteData.addAll(allRouteData);
-                    mRouteAdapter.notifyDataSetChanged();
-                    Log.d("dd","have");
-                } else {
-                    filter(tempText);
-                }*/
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -100,32 +87,22 @@ public class search_by_no extends Fragment {
             }
         });
 
-        //mLinearLayoutManager.setReverseLayout(true);
-        //mLinearLayoutManager.setStackFromEnd(true);
         return view;
     }
 
     private void filter(String text) {
-        //new array list that will hold the filtered data
-
-
         //looping through existing elements
         MainActivity.mRouteData.clear();
 
         for (route_data s : MainActivity.allRouteData) {
             //if the existing elements contains the search input
             if (s.getmRouteNo().contains(text.toString().toUpperCase()) || s.getmRouteName().contains(text.toString().toUpperCase())) {
-
                 //adding the element to filtered list
                 MainActivity.mRouteData.add(s);
-
             }
-            Log.d("ddddd","visited");
+
          }
-
-
     }
-
 
 }
 

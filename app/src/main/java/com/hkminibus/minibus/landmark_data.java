@@ -1,17 +1,20 @@
 package com.hkminibus.minibus;
 
 public class landmark_data{
-    private String mLandmark;
-    private double mLat;
-    private double mLng;
 
-    public landmark_data(String mLandmark, double mLat, double mLng){
-        this.mLandmark = mLandmark;
-        this.mLat = mLat;
-        this.mLng = mLng;
+    private double latitude;
+    private double longitude;
+    private String name;
+
+    public landmark_data(String name){
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public String getmLandmark(){return mLandmark;}
-    public double getmLat() {return mLat;}
-    public double getmLng() {return mLng;}
+    public landmark_data(){}
+
+    public String getName(){return name;}
+    public double getLatitude() {return latitude;}
+    public double getLongitude() {return longitude;}
 }

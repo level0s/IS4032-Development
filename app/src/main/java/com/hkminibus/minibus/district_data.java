@@ -1,17 +1,20 @@
 package com.hkminibus.minibus;
 
 public class district_data{
-    private String mDistrict;
-    private double mLat;
-    private double mLng;
+    private String name;
+    private double latitude;
+    private double longitude;
 
-    public district_data(String mDistrict, double mLat, double mLng){
-        this.mDistrict = "地區: "+mDistrict;
-        this.mLat = mLat;
-        this.mLng = mLng;
+    public district_data(double latitude, double longitude, String name){
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public String getmDistrict(){return mDistrict;}
-    public double getmLat() {return mLat;}
-    public double getmLng() {return mLng;}
+    public district_data(){}
+
+    public String getName(){return name;}
+    public double getLatitude() {return latitude;}
+    public double getLongitude() {return longitude;}
 }
+
