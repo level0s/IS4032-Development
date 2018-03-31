@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
+       /* final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
         Routes.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,10 +98,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });
+        });*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        allStop = getIntent().getBundleExtra("bundle").getParcelableArrayList("allStop");
+        mRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("mRouteData");
+        allRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("allRouteData");
+        allDistrict = getIntent().getBundleExtra("bundle").getParcelableArrayList("allDistrict");
+        allLandmark = getIntent().getBundleExtra("bundle").getParcelableArrayList("allLandmark");
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -128,28 +134,28 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         });
     }
 
-     private void addStopList() {
-         for (route_data r: allRouteData) {
-             final route_data current = r;
-             String routeID = r.getmRouteID();
-             final Query Stops = mRef.child("Stop/" + routeID);
-             Stops.addValueEventListener(new ValueEventListener() {
-                 @Override
-                 public void onDataChange(DataSnapshot dataSnapshot) {
-                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                         stop_data s = ds.getValue(stop_data.class);
-                     current.setmStopList(s);
-                     if(!allStop.contains(s)){
-                         allStop.add(s);
-                     }
-                 }
-                 }
-                 @Override
-                 public void onCancelled(DatabaseError databaseError) {
-                 }
-             });
-         }
-     }
+    /*private void addStopList() {
+        for (route_data r: allRouteData) {
+            final route_data current = r;
+            String routeID = r.getmRouteID();
+            final Query Stops = mRef.child("Stop/" + routeID);
+            Stops.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        stop_data s = ds.getValue(stop_data.class);
+                        current.setmStopList(s);
+                        if(!allStop.contains(s)){
+                            allStop.add(s);
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }*/
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         //TabLayout里的TabItem被选中的时候触发
