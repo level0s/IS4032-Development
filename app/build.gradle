@@ -12,8 +12,8 @@ android {
         minibus {
             keyAlias 'key0'
             keyPassword 'minibus'
+            storeFile file('/Users/Jasmine/Desktop/IS4032-Development/keystores/Minibus.jks')
             //C:\Users\Naida Lo\AndroidStudioProjects\IS4032\keystores\Minibus.jks
-            storeFile file('C:\\Users\\Naida Lo\\AndroidStudioProjects\\IS4032\\keystores\\Minibus.jks')
             storePassword 'minibus'
         }
     }

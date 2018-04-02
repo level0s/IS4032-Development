@@ -55,8 +55,9 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"/>
-
-
+        <activity
+            android:name=".stop_main"
+            android:windowSoftInputMode="adjustNothing"/>
     </application>
 
 </manifest>

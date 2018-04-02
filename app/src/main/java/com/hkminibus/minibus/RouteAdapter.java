@@ -24,10 +24,34 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
     private List<route_data> mRouteData;
     private Context mContext;
 
+    private OnItemClickListener mOnItemClickListener;
+
+    /** *ViewHolder = RouteViewHolder*/
+    //no public and final before luke change
+    class RouteViewHolder extends RecyclerView.ViewHolder {
+
+        TextView mRouteNo;
+        TextView mRouteName;
+        RelativeLayout mLayout;
+
+        RouteViewHolder(View itemView) {
+            super(itemView);
+            mRouteNo = (TextView) itemView.findViewById(R.id.route_no);
+            mRouteName = (TextView) itemView.findViewById(R.id.route_name);
+        }
+        public void setValues(route_data mRouteData) {
+            mRouteName.setText(mRouteData.getmRouteName());
+            mRouteNo.setText(mRouteData.getmRouteNo());
+        }
+    }
+    /** *adapter = Route Adapter*/
+    //負責把 Dataset 裡面的資料，轉成 view 給 RecyclerView 顯示
     public RouteAdapter(Context mContext, List<route_data> mRouteData) {
         this.mRouteData = mRouteData;
         this.mContext = mContext;
     }
+
+    //建立 view，並將 view 轉成 ViewHolder
     //创建ChildView
     @Override
     public RouteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,15 +59,25 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
                 parent, false);
         return new RouteViewHolder(view);
     }
-
+    //put routedata 顯示在 view
     //将数据绑定到每一个childView中
     @Override
-    public void onBindViewHolder(final RouteViewHolder holder, int position) {
+    public void onBindViewHolder(final RouteViewHolder holder, final int position) {
         //holder.mRouteNo.setText(mRouteData.get(position).getmRouteNo());
         //holder.mRouteName.setText(mRouteData.get(position).getmRouteName());
 
         route_data mRoute = mRouteData.get(position);
         holder.setValues(mRoute);
+        // item click
+
+        if (mOnItemClickListener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClickListener.onItemClick(holder.itemView, position);
+                }
+            });
+        }
 
         /*Tap and go to another page
                 holder.mLayout.setOnClickListener(new View.OnClickListener() {
@@ -56,46 +90,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
                 }
              });*/
     }
-
     //得到child的数量
     @Override
     public int getItemCount() {
         return mRouteData.size();
     }
 
-
-    //This method will filter the list
-    //here we are passing the filtered data
-    //and assigning it to the list with notifydatasetchanged method
-    /*public void filterList(List<route_data> filterdNames) {
-
-        notifyDataSetChanged();
-
-
-        Log.d("", "Herewego4");
-    }*/
-//}
-
-    //no public and final before luke change
-    class RouteViewHolder extends RecyclerView.ViewHolder {
-
-        TextView mRouteNo;
-        TextView mRouteName;
-
-        RelativeLayout mLayout;
-
-        RouteViewHolder(View itemView) {
-            super(itemView);
-            mRouteNo = (TextView) itemView.findViewById(R.id.route_no);
-            mRouteName = (TextView) itemView.findViewById(R.id.route_name);
-
-
-        }
-
-        public void setValues(route_data mRouteData) {
-            mRouteName.setText(mRouteData.getmRouteName());
-            mRouteNo.setText(mRouteData.getmRouteNo());
-
-        }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
 }

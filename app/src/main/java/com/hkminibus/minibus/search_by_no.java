@@ -1,5 +1,6 @@
 package com.hkminibus.minibus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,15 +32,12 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-
 public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
 
     RecyclerView mRecyclerView;
     EditText editText;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-
-
 
     @Nullable
     @Override
@@ -57,20 +55,27 @@ public class search_by_no extends Fragment {
         final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
 
+        /** *Select the recyclerView **/
+        mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.d("C", "YY");
+                Intent i = new Intent(getActivity(),stop_main.class);
+                startActivity(i);
+
+            }
+        });
+
         editText.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
                 String tempText = editable.toString();
-
 
                 if (tempText.matches("")) {
                     MainActivity.mRouteData.clear();
