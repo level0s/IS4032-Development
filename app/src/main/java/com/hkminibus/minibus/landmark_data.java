@@ -3,7 +3,7 @@ package com.hkminibus.minibus;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class landmark_data implements Parcelable{
+public class landmark_data implements Parcelable,location_data{
 
     private double latitude;
     private double longitude;

@@ -3,6 +3,7 @@ package com.hkminibus.minibus;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,12 @@ public class route_data implements Parcelable{
     private String mRouteID;
     private String mRouteNo;
     private String mRouteName;
-    //private stop_data mStopList1;
-    private final List<stop_data> mStopList = new ArrayList<stop_data>();
+    private List<stop_data> mStopList = new ArrayList<stop_data>();
 
     public route_data(String mRouteID, String mRouteNo, String mRouteName) {
         this.mRouteID = mRouteID;
         this.mRouteNo = mRouteNo;
         this.mRouteName = mRouteName;
-        //this.mStopList1 = MainActivity.getmStopList(mStopList);
     }
 
     public void setmStopList(stop_data s){
@@ -32,6 +31,7 @@ public class route_data implements Parcelable{
         return mRouteNo;
     }
     public String getmRouteName() {return mRouteName;}
+    public List<stop_data>getmStopList(){return mStopList;}
 
 
     @Override
@@ -43,8 +43,9 @@ public class route_data implements Parcelable{
         mRouteID = in.readString();
         mRouteNo = in.readString();
         mRouteName = in.readString();
-        List<stop_data>mStopList = new ArrayList<stop_data>();
-        in.readList(mStopList,stop_data.class.getClassLoader());
+        //List<stop_data>mStopList = new ArrayList<stop_data>();
+        //in.readList(mStopList,stop_data.class.getClassLoader());
+        mStopList = in.readArrayList(stop_data.class.getClassLoader());
     }
 
 
