@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class stop_data implements Parcelable{
+public class stop_data implements Parcelable, location_data{
     private String name;
     private double latitude;
     private double longitude;

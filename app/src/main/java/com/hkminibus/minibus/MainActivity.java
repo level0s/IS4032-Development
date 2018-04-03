@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static List<district_data> allDistrict = new ArrayList<>();
     public static List<landmark_data> allLandmark = new ArrayList<>();
     public static List<stop_data> allStop = new ArrayList<>();
+    public static List<location_data> allLocation = new ArrayList<>();
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -108,7 +109,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         allRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("allRouteData");
         allDistrict = getIntent().getBundleExtra("bundle").getParcelableArrayList("allDistrict");
         allLandmark = getIntent().getBundleExtra("bundle").getParcelableArrayList("allLandmark");
-
+        allLocation.addAll(allDistrict);
+        allLocation.addAll(allLandmark);
+        allLocation.addAll(allStop);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
