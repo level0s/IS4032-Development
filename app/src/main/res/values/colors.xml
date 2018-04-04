@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorsplashscreen">#FFFFFF</color>
+    <color name="red">#FF0000</color>
     <color name="dark_gray">#696969</color>
 </resources>

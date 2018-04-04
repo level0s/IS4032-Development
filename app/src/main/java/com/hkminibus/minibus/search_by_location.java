@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.DialogInterface;
 import android.content.IntentSender;
@@ -306,6 +307,18 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                 MainActivity.mRouteData.clear();
                 //Perform search in DB with Start and End, add into mRouteData
                 mRouteAdapter.notifyDataSetChanged();
+            }
+        });
+        /** *Select the recyclerView **/
+        mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.d("C", "YY");
+                Intent i = new Intent(getActivity(),stop_main.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("CRouteData", MainActivity.mRouteData.get(position));// 序列化
+                i.putExtras(bundle);// 发送数据
+                startActivity(i);
             }
         });
 

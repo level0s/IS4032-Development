@@ -21,11 +21,11 @@
 
     <TextView
         android:id="@+id/stop_name"
-        android:layout_width="251dp"
-        android:layout_height="22dp"
+        android:layout_width="201dp"
+        android:layout_height="18dp"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/icon"
         android:layout_toRightOf="@+id/icon"
@@ -34,11 +34,39 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/icon"
-        app:layout_constraintEnd_toStartOf="@+id/button_arrow"
-        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintEnd_toStartOf="@+id/waitingPerson_icon"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="@+id/icon"
         app:layout_constraintVertical_bias="0.0" />
+
+
+    <ImageButton
+        android:id="@+id/waitingPerson_icon"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/waiting_ppl_icon"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/icon"
+        app:layout_constraintEnd_toStartOf="@+id/button_arrow"
+        app:layout_constraintTop_toTopOf="@+id/icon" />
+
+    <TextView
+        android:id="@+id/waitingPerson_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="3"
+        android:textAlignment="center"
+        android:textColor="@color/red"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/waitingPerson_icon"
+        app:layout_constraintEnd_toEndOf="@+id/waitingPerson_icon"
+        app:layout_constraintStart_toStartOf="@+id/waitingPerson_icon" />
 
     <ImageButton
         android:id="@+id/button_arrow"
@@ -55,14 +83,77 @@
         app:layout_constraintTop_toTopOf="@+id/icon"
         app:srcCompat="@drawable/button_arrow" />
 
-    <RecyclerView
-        android:id="@+id/time"
-        android:layout_width="262dp"
-        android:layout_height="112dp"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/time_layout"
+        android:layout_width="160dp"
+        android:layout_height="91dp"
         android:layout_marginTop="8dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="@+id/stop_name"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/stop_name"
-        app:layout_constraintTop_toBottomOf="@+id/stop_name" />
+        app:layout_constraintTop_toBottomOf="@+id/stop_name"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/time1"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="還有1分鐘"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/time2"
+            app:layout_constraintEnd_toStartOf="@+id/type1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="69dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="還有2分鐘"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/time1"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/time1"
+            app:layout_constraintTop_toBottomOf="@+id/time1" />
+
+        <TextView
+            android:id="@+id/type2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@mipmap/bus19_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/type1"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/type1"
+            app:layout_constraintTop_toBottomOf="@+id/type1"
+            app:layout_constraintVertical_bias="0.529"/>
+
+        <TextView
+            android:id="@+id/type1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@mipmap/bus16_icon"
+            app:layout_constraintBottom_toTopOf="@+id/type2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/time1"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>
