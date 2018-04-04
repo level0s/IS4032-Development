@@ -2,6 +2,7 @@ package com.hkminibus.minibus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -61,6 +62,12 @@ public class search_by_no extends Fragment {
             public void onItemClick(View view, int position) {
                 Log.d("C", "YY");
                 Intent i = new Intent(getActivity(),stop_main.class);
+                //i.putExtra("CRouteID", MainActivity.mRouteData.get(position).getmRouteID());
+                //i.putExtra("CRouteNo", MainActivity.mRouteData.get(position).getmRouteNo());
+                //i.putExtra("CRouteName", MainActivity.mRouteData.get(position).getmRouteName());
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("CRouteData", MainActivity.mRouteData.get(position));// 序列化
+                i.putExtras(bundle);// 发送数据
                 startActivity(i);
 
             }

@@ -5,10 +5,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class route_data implements Parcelable{
+public class route_data implements Parcelable {
     private String mRouteID;
     private String mRouteNo;
     private String mRouteName;

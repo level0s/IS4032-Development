@@ -53,4 +53,3 @@ public class stop_data implements Parcelable, location_data{
     };
 
 }
-    git stash
