@@ -10,17 +10,20 @@ public class stop_data implements Parcelable, location_data{
     private String name;
     private double latitude;
     private double longitude;
+    private double radius;
 
-    public stop_data(String name, double latitude, double longitude){
+    public stop_data(String name, double latitude, double longitude, double radius){
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.radius = radius;
     }
 
     public stop_data(){}
     public String getName(){return name;}
     public double getLatitude() {return latitude;}
     public double getLongitude() {return longitude;}
+    public double getRadius(){return radius;}
 
     @Override
     public int describeContents() {
@@ -32,12 +35,14 @@ public class stop_data implements Parcelable, location_data{
         parcel.writeString(name);
         parcel.writeDouble(latitude);
         parcel.writeDouble(longitude);
+        parcel.writeDouble(radius);
     }
 
     public stop_data(Parcel in){
         name = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
+        radius = in.readDouble();
     }
 
     public static final Parcelable.Creator<stop_data> CREATOR = new Parcelable.Creator<stop_data>()

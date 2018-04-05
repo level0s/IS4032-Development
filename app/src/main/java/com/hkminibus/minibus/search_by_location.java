@@ -33,7 +33,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
@@ -79,6 +83,8 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
+import static android.location.Location.distanceBetween;
+
 
 //com.google.android.gms.location.locationlistner,googleapiclient.connectioncallbacks, googleapiclient.onconnectionfailedListener
 public class search_by_location extends Fragment implements OnMapReadyCallback {
@@ -86,16 +92,17 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     private boolean isFulllScreen = false;
 
     RecyclerView mRecyclerView;
-    EditText editStart;
-    EditText editEnd;
+    ArrayAdapter locationAdapter;
+    AutoCompleteTextView editStart;
+    AutoCompleteTextView editEnd;
     ImageButton searchButton;
-    String Start;
-    String End;
-    ArrayList startLocation = new ArrayList();
-    ArrayList endLocation = new ArrayList();
+    ImageButton locationButton;
+    location_data start;
+    location_data end;
+    ArrayList locationName = new ArrayList();
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-    Context context;
-    RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
+    double currentLat = 0.0;
+    double currentLng = 0.0;
 
     private GoogleMap mMap;
     //An immutable class that aggregates all camera position parameters such as location, zoom level, tilt angle, and bearing.
@@ -111,7 +118,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private final LatLng mDefaultLocation = new LatLng(22.352734, 114.1277);
     private static final int DEFAULT_ZOOM = 18;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -174,141 +181,90 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
 
+        //create location name list for searching
+        for (location_data i : MainActivity.allLocation) {
+            if(!locationName.contains(i.getName())){locationName.add(i.getName());}
+        }
 
-        editStart = (EditText) view.findViewById(R.id.editStart);
-        editEnd = (EditText) view.findViewById(R.id.editEnd);
+        //set auto complete text view for start point and default at current location
+        locationAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line,locationName);
+        editStart = (AutoCompleteTextView) view.findViewById(R.id.editStart);
+        editStart.setAdapter(locationAdapter);
+        editStart.setThreshold(1);
+        editStart.setAdapter(locationAdapter);
+        editStart.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
+            }
+        });
+        //set auto complete text view for destination
+        editEnd = (AutoCompleteTextView) view.findViewById(R.id.editEnd);
+        editEnd.setThreshold(1);
+        editEnd.setAdapter(locationAdapter);
+        editEnd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
+            }
+        });
         searchButton = (ImageButton) view.findViewById(R.id.searchButton);
-
+        locationButton = (ImageButton) view.findViewById(R.id.locationButton);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
         final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
 
-
-        editStart.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String tempStart = editable.toString();
-                if (tempStart.matches("")) {
-                    //default: start=current location
-                    startLocation.addAll(resetList());
-                } else {
-                    //add filtered locatioins to array
-                    startLocation.clear();
-                    for (district_data d : MainActivity.allDistrict) {
-                        if (d.getName().contains(tempStart)) {
-                            startLocation.add(d.getName());
-                        }
-                    }
-                    for (landmark_data k : MainActivity.allLandmark) {
-                    if (k.getName().contains(tempStart)) {
-                        startLocation.add(k.getName());
-                        }
-                    }
-                }
-            }
-        });
-        editStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    startLocation.addAll(resetList());}
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("請選擇起點");
-                    if (startLocation.isEmpty()){
-                        builder.setMessage("找不到地點");
-                    } else {
-                        builder.setItems((CharSequence[]) startLocation.toArray(new String[startLocation.size()]),new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                           Start = (String)startLocation.get(which);
-                           editStart.setText(Start);
-                        }
-                    });}
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
-                    builder.show();
-                }
-            }
-        });
-
-        endLocation.addAll(MainActivity.allDistrict);
-        endLocation.addAll(MainActivity.allLandmark);
-        editEnd.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String tempEnd = editable.toString();
-                if (tempEnd.matches("")) {
-                    endLocation.clear();
-                    endLocation.addAll(resetList());
-                } else {
-                    //add filtered locatioins to array
-                    endLocation.clear();
-                    for (district_data d : MainActivity.allDistrict) {
-                        if (d.getName().contains(tempEnd)) {
-                            endLocation.add(d.getName());
-                        }
-                    }
-                    for (landmark_data k : MainActivity.allLandmark) {
-                        if (k.getName().contains(tempEnd)) {
-                            endLocation.add(k.getName());
-                        }
-                    }
-                }
-            }
-        });
-        editEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    endLocation.addAll(resetList());}
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("請選擇目的地");
-                    if (endLocation.isEmpty()){
-                        builder.setMessage("找不到地點");
-                    } else {
-                        builder.setItems((CharSequence[]) endLocation.toArray(new String[endLocation.size()]),new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                End = (String) endLocation.get(which);
-                                editEnd.setText(End);
-                            }
-                        });}
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
-                    builder.show();
-                }
-            }
-        });
-
-        searchButton.setOnClickListener(new Button.OnClickListener(){
+        locationButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                searchButton.setFocusableInTouchMode(true);
-                MainActivity.mRouteData.clear();
-                //Perform search in DB with Start and End, add into mRouteData
-                mRouteAdapter.notifyDataSetChanged();
+                editStart.setText("目前位置");
             }
         });
+
+        searchButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //hide keyboard
+                InputMethodManager in = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
+
+                //set start location and end location, then search route.
+                if (validateSearch(editStart.getText().toString(),editEnd.getText().toString())) {
+                    MainActivity.mRouteData.clear();
+                    List<route_data> matchStart = new ArrayList<>();
+                    List<Integer> startIndex = new ArrayList<>();
+                    for (route_data r : MainActivity.allRouteData) {
+                        for (stop_data s : r.getmStopList()) {
+                            float[] dist = new float[1];
+                            distanceBetween(start.getLatitude(), start.getLongitude(), s.getLatitude(), s.getLongitude(), dist);
+                            if (dist[0] < start.getRadius()) {
+                                matchStart.add(r);
+                                startIndex.add(r.getmStopList().indexOf(s));
+                                break;
+                            }
+                        }
+                    }
+                    for (route_data r : matchStart) {
+                        int j=0;
+                        for (int i=startIndex.get(j);i<startIndex.size();i++){
+                            float[] dist = new float[1];
+                            distanceBetween(end.getLatitude(), end.getLongitude(), r.getmStopList().get(i).getLatitude(), r.getmStopList().get(i).getLongitude(), dist);
+                            if (dist[0] < end.getRadius()) {
+                                MainActivity.mRouteData.add(r);
+                                break;
+                            }
+                        }
+                        j++;
+                    }
+                    mRouteAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         /** *Select the recyclerView **/
         mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
             @Override
@@ -321,24 +277,10 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                 startActivity(i);
             }
         });
-
         return view;
     }
 
-    public ArrayList resetList() {
-        ArrayList locationList = new ArrayList();
-        locationList.clear();
-        for (district_data d : MainActivity.allDistrict) {
-            locationList.add(d.getName());
-        }
-        for (landmark_data k : MainActivity.allLandmark) {
-            locationList.add(k.getName());
-        }
-        for (stop_data s : MainActivity.allStop){
-            locationList.add(s.getName());
-        }
-        return locationList;
-    }
+
 
     //callback to save the state when the activity pauses:
     @Override
@@ -395,6 +337,8 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
+                            currentLat = mLastKnownLocation.getLatitude();
+                            currentLng = mLastKnownLocation.getLongitude();
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -402,17 +346,21 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
                             mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                                    .newLatLngZoom(mDefaultLocation, 10));
                             mMap.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }
                 });
+                //Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                //handleNewLocation(location);
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
+    /*private void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+    }*/
     /**
      * Prompts the user for permission to use the device location.
      */
@@ -475,8 +423,51 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    //confirm start/end location are correct
+    private Boolean validateSearch(String s, String e){
+        boolean S = false;
+        if (s.matches("目前位置")){
+            S = true;
+            start = new landmark_data("Current location",currentLat,currentLng,500);
+        }
+        else {
+            for (location_data i : MainActivity.allLocation) {
+                if (i.getName().matches(s)) {
+                    S = true;
+                    start = i;
+                }
+            }
+        }
+        boolean E = false;
+        if (!s.matches("目前位置") && e.matches("目前位置")){
+            E = true;
+            end = new landmark_data("Current location",currentLat,currentLng,500);
+        }
+        else {
+            for (location_data i : MainActivity.allLocation) {
+                if (i.getName().matches(e)) {
+                    E = true;
+                    end = i;
+                }
+            }
+        }
+        Boolean valid = S&&E;
+        if (valid==false){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            if (!S) {
+                builder.setTitle("請輸入正確起點");
+            }
+            else if (!E){
+                builder.setTitle("請輸入正確目的地");}
+            builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+            builder.show();
+        }
+        return valid;
+    }
 }
-
 
 
 

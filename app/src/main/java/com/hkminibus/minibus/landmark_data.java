@@ -8,11 +8,13 @@ public class landmark_data implements Parcelable,location_data{
     private double latitude;
     private double longitude;
     private String name;
+    private double radius;
 
-    public landmark_data(String name){
+    public landmark_data(String name, double latitude, double longitude, double radius){
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.radius = radius;
     }
 
     public landmark_data(){}
@@ -20,6 +22,7 @@ public class landmark_data implements Parcelable,location_data{
     public String getName(){return name;}
     public double getLatitude() {return latitude;}
     public double getLongitude() {return longitude;}
+    public double getRadius() {return radius;}
 
     @Override
     public int describeContents() {
@@ -30,6 +33,7 @@ public class landmark_data implements Parcelable,location_data{
         name = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
+        radius = in.readDouble();
     }
 
     @Override
@@ -37,6 +41,7 @@ public class landmark_data implements Parcelable,location_data{
         parcel.writeString(name);
         parcel.writeDouble(latitude);
         parcel.writeDouble(longitude);
+        parcel.writeDouble(radius);
     }
 
     public static final Parcelable.Creator<landmark_data> CREATOR = new Parcelable.Creator<landmark_data>()

@@ -7,10 +7,11 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editStart"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:dropDownHeight="120dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -22,10 +23,11 @@
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/editEnd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:dropDownHeight="120dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -121,6 +123,16 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </android.support.design.widget.CoordinatorLayout>
+
+    <ImageButton
+        android:id="@+id/locationButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editStart"
+        app:layout_constraintEnd_toEndOf="@+id/editStart"
+        app:layout_constraintTop_toTopOf="@+id/editStart"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
 
 </android.support.constraint.ConstraintLayout>
