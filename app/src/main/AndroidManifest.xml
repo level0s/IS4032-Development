@@ -57,6 +57,8 @@
             android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".stop_main"
+            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustNothing"/>
     </application>
 

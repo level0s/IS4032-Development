@@ -2,17 +2,12 @@ package com.hkminibus.minibus;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.DialogInterface;
-import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,65 +15,45 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup.LayoutParams;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 
 
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.text.TextWatcher;
 import android.widget.ImageButton;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
 import android.support.v4.content.ContextCompat;
-import android.Manifest;
-import android.app.Activity;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.widget.Switch;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.maps.android.data.kml.KmlContainer;
+import com.google.maps.android.data.kml.KmlLayer;
+import com.google.maps.android.data.kml.KmlPlacemark;
+import com.google.maps.android.data.kml.KmlPolygon;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 
 import java.util.ArrayList;
@@ -119,7 +94,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(22.352734, 114.1277);
-    private static final int DEFAULT_ZOOM = 18;
+    private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
@@ -130,7 +105,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
-
+    public KmlLayer kmlLayer;
 
     // 連線與使用Google Services服務
     //private GoogleApiClient mGoogleApiClient;
@@ -237,6 +212,10 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                     MainActivity.mRouteData.clear();
                     List<route_data> matchStart = new ArrayList<>();
                     List<Integer> startIndex = new ArrayList<>();
+                    if (matchStart.isEmpty()){
+                        Log.d(TAG,"null");
+                        searchKMLFile("");
+                    }
                     for (route_data r : MainActivity.allRouteData) {
                         for (stop_data s : r.getmStopList()) {
                             float[] dist = new float[1];
@@ -250,16 +229,21 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                     }
                     for (route_data r : matchStart) {
                         int j=0;
-                        for (int i=startIndex.get(j);i<startIndex.size();i++){
+                        for (int i=startIndex.get(j);i<r.getmStopList().size();i++){
                             float[] dist = new float[1];
                             distanceBetween(end.getLatitude(), end.getLongitude(), r.getmStopList().get(i).getLatitude(), r.getmStopList().get(i).getLongitude(), dist);
                             if (dist[0] < end.getRadius()) {
                                 MainActivity.mRouteData.add(r);
+                                String idd = r.getmRouteID();
+                                Log.d(TAG,idd);
+                                searchKMLFile(r.getmRouteID());
+
                                 break;
                             }
                         }
                         j++;
                     }
+
                     mRouteAdapter.notifyDataSetChanged();
                 }
             }
@@ -285,6 +269,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     //callback to save the state when the activity pauses:
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState");
         if (mMap != null) {
             outState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
             outState.putParcelable(KEY_LOCATION, mLastKnownLocation);
@@ -308,7 +293,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -318,6 +303,9 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), DEFAULT_ZOOM));
+        Log.d(TAG, "camera should be moved0.");
+        //searchKMLFile();
 
     }
 
@@ -331,31 +319,34 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
             if (mLocationPermissionGranted) {
                 //??
                 Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+
                 locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
+
+                        if (task.isSuccessful() && task.getResult() != null) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
                             currentLat = mLastKnownLocation.getLatitude();
                             currentLng = mLastKnownLocation.getLongitude();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), DEFAULT_ZOOM));
+                            Log.d(TAG, "camera should be moved.");
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s", task.getException());
+                            Log.e(TAG, "Exception: %s getresult", task.getException());
+
                             mMap.moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(mDefaultLocation, 10));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                            mMap.getUiSettings().setMyLocationButtonEnabled(true);
                         }
                     }
+
                 });
                 //Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 //handleNewLocation(location);
             }
         } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e("Exception: %strycatch", e.getMessage());
         }
     }
     /*private void handleNewLocation(Location location) {
@@ -419,7 +410,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                 getLocationPermission();
             }
         } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e("Exception: %sui", e.getMessage());
         }
     }
 
@@ -466,6 +457,68 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
             builder.show();
         }
         return valid;
+    }
+
+
+
+    public void searchKMLFile (String mapId) {
+        try {
+            //mMap = getMap();
+
+            retrieveFileFromResource(mapId);
+            //retrieveFileFromUrl();
+        } catch (Exception e) {
+            Log.e("Exception caught", e.toString());
+        }
+    }
+
+    public void retrieveFileFromResource(String mapId) {
+        try {
+            Log.d(TAG,mapId);
+            if (mapId.equals("M1")){
+                KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.m1, getActivity().getApplicationContext());
+                kmlLayer.addLayerToMap();
+                moveCameraToKml(kmlLayer);
+            }
+            if (mapId.equals("")){
+                    Log.d(TAG, "remove layer");
+                    mMap.clear();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void moveCameraToKml(KmlLayer kmlLayer) {
+
+
+
+        //Retrieve the first container in the KML layer
+        KmlContainer container = kmlLayer.getContainers().iterator().next();
+        //Retrieve a nested container within the first container
+        container = container.getContainers().iterator().next();
+        //Retrieve the first placemark in the nested container
+        KmlPlacemark placemark = container.getPlacemarks().iterator().next();
+        //Retrieve a polygon object in a placemark
+        KmlPolygon polygon = (KmlPolygon) placemark.getGeometry();
+        //Create LatLngBounds of the outer coordinates of the polygon
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng latLng : polygon.getOuterBoundaryCoordinates()) {
+            builder.include(latLng);
+        }
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        width = width -100;
+        height = height -200;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), width, height, 1));
+        Log.d(TAG,"kml has input");
+
     }
 }
 

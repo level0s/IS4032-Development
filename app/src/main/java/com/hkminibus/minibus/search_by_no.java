@@ -35,7 +35,7 @@ import java.util.List;
 
 public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
-
+    public static List<route_data> mRouteDataNo = new ArrayList<>();
     RecyclerView mRecyclerView;
     EditText editText;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -47,14 +47,18 @@ public class search_by_no extends Fragment {
         View view =  inflater.inflate(R.layout.search_by_no_fragment, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
 
+        mRouteDataNo.addAll(MainActivity.allRouteData);
+
         editText = (EditText) view.findViewById(R.id.editText);
 
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
 
-        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
+        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteDataNo);
         mRecyclerView.setAdapter(mRouteAdapter);
+
+
 
         /** *Select the recyclerView **/
         mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
@@ -66,7 +70,7 @@ public class search_by_no extends Fragment {
                 //i.putExtra("CRouteNo", MainActivity.mRouteData.get(position).getmRouteNo());
                 //i.putExtra("CRouteName", MainActivity.mRouteData.get(position).getmRouteName());
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("CRouteData", MainActivity.mRouteData.get(position));// 序列化
+                bundle.putParcelable("CRouteData", mRouteDataNo.get(position));// 序列化
                 i.putExtras(bundle);// 发送数据
                 startActivity(i);
 
@@ -85,8 +89,8 @@ public class search_by_no extends Fragment {
                 String tempText = editable.toString();
 
                 if (tempText.matches("")) {
-                    MainActivity.mRouteData.clear();
-                    MainActivity.mRouteData.addAll(MainActivity.allRouteData);
+                    mRouteDataNo.clear();
+                    mRouteDataNo.addAll(MainActivity.allRouteData);
                     mRouteAdapter.notifyDataSetChanged();
                     Log.d("dd","have");
                 } else {
@@ -104,13 +108,13 @@ public class search_by_no extends Fragment {
 
     private void filter(String text) {
         //looping through existing elements
-        MainActivity.mRouteData.clear();
+        mRouteDataNo.clear();
 
         for (route_data s : MainActivity.allRouteData) {
             //if the existing elements contains the search input
             if (s.getmRouteNo().contains(text.toString().toUpperCase()) || s.getmRouteName().contains(text.toString().toUpperCase())) {
                 //adding the element to filtered list
-                MainActivity.mRouteData.add(s);
+                mRouteDataNo.add(s);
             }
 
          }
