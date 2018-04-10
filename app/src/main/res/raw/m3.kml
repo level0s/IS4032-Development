@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Copy of 九龍區專線小巴79K號線：往旺角東站</name>
+    <description><![CDATA[Kowloon GMB Route 79K: to Mong Kok East Station<br><br><br>九龍區專線小巴79K號線<br>柏景灣—旺角東站<br>路線圖及分站位置(往旺角東站方向)<br><br>詳細路線資料，請瀏覽：<br>http://www.16seats.net/chi/gmb/gk_79k.html<br><br>© www.16seats.net 著作權所有<br><br><br>Kowloon GMB Route 79K<br>Park Avenue - Mong Kok East Station<br>Route Map and Stop Location (Mong Kok East Station bound)<br><br>For detailed route information, please visit<br>http://www.16seats.net/eng/gmb/gk_79k.html<br><br>© www.16seats.net All Rights Reserved.]]></description>
+    <Style id="icon-503-DB4436-normal">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://i.imgur.com/1NDeHnx.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-DB4436-highlight">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://i.imgur.com/1NDeHnx.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-DB4436">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-DB4436-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-DB4436-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-DB4436-nodesc-normal">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://i.imgur.com/K64WfFX.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-DB4436-nodesc-highlight">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://i.imgur.com/K64WfFX.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-DB4436-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-DB4436-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-DB4436-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-DB4436-nodescd-normal">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+            <Icon>
+              <href>https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png</href>
+            </Icon>
+        <hotSpot x="0" xunits="pixels" y="0" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-DB4436-nodescd-highlight">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+            <Icon>
+              <href>https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png</href>
+            </Icon>
+        <hotSpot x="0" xunits="pixels" y="0" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-DB4436-nodescd">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-DB4436-nodescd-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-DB4436-nodescd-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+
+
+
+    <Style id="line-009900-5000-normal">
+      <LineStyle>
+        <color>64B40014</color>
+        <width>20</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-009900-5000-highlight">
+      <LineStyle>
+        <color>64B40014</color>
+        <width>20</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-009900-5000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-009900-5000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-009900-5000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-1267FF-5000-normal">
+      <LineStyle>
+        <color>50147800</color>
+        <width>5</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-1267FF-5000-highlight">
+      <LineStyle>
+        <color>50147800</color>
+        <width>7.5</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-1267FF-5000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-1267FF-5000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-1267FF-5000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-000000-1-0-nodesc-normal">
+      <LineStyle>
+        <color>ff000000</color>
+        <width>0.001</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>00000000</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-000000-1-0-nodesc-highlight">
+      <LineStyle>
+        <color>ff000000</color>
+        <width>0.0015</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>00000000</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-000000-1-0-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-000000-1-0-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-000000-1-0-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Untitled layer</name>
+      <Placemark>
+        <name>Polygon 1</name>
+        <styleUrl>#poly-000000-1-0-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                114.1576481,22.3245916,0
+                114.1586781,22.310736,0
+                114.1776896,22.3112125,0
+                114.1774321,22.3248695,0
+                114.1576481,22.3245916,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>分站位置  Stop Location</name>
+      <Placemark>
+        <name>行車路線(1/3)</name>
+        <description>Routeing (1/3)</description>
+        <styleUrl>#line-009900-5000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            114.163881,22.315732,0
+            114.163586,22.31706,0
+            114.16347,22.317295,0
+            114.163352,22.31768,0
+            114.163312,22.317767,0
+            114.163232,22.317863,0
+            114.163116,22.317946,0
+            114.162473,22.318308,0
+            114.162367,22.318392,0
+            114.162261,22.318512,0
+            114.162428,22.318804,0
+            114.162478,22.318864,0
+            114.162546,22.318915,0
+            114.162701,22.318961,0
+            114.16287,22.31892,0
+            114.163176,22.318717,0
+            114.165254,22.318747,0
+            114.165475,22.318784,0
+            114.16601,22.318801,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>行車路線(2/3)</name>
+        <description>Routeing (2/3)</description>
+        <styleUrl>#line-009900-5000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            114.16601,22.318801,0
+            114.166222,22.318791,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>行車路線(3/3)</name>
+        <description>Routeing (3/3)</description>
+        <styleUrl>#line-009900-5000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            114.166222,22.318791,0
+            114.167201,22.31896,0
+            114.167587,22.319019,0
+            114.167644,22.319012,0
+            114.167601,22.319201,0
+            114.167488,22.31995,0
+            114.167373,22.320567,0
+            114.16864,22.320772,0
+            114.169085,22.320841,0
+            114.169651,22.320964,0
+            114.171282,22.321278,0
+            114.17143,22.321295,0
+            114.171734,22.319817,0
+            114.172635,22.319983,0
+            114.172494,22.320575,0
+            114.172231,22.320711,0
+            114.172185,22.320749,0
+            114.172157,22.320799,0
+            114.171888,22.32221,0
+            114.171996,22.322257,0
+            114.172074,22.32227,0
+            114.172327,22.322253,0
+            114.172326,22.321882,0
+            114.172312,22.321824,0
+            114.172295,22.321793,0
+            114.172264,22.32178,0
+            114.17219,22.321789,0
+            114.172175,22.32188,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>0. 柏景灣巴士總站</name>
+        <description>0. Park Avenue Bus Terminus</description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            114.1636,22.315557,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1. 海泓道，柏景灣</name>
+        <description>1. Park Avenue, Hoi Wang Rd</description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            114.163755,22.316046,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2. 櫻桃街，中華基督教會銘基書院</name>
+        <description>2. CCC Ming Kei College, Cherry St</description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            114.164319,22.318766,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3. 新填地街，朗豪坊</name>
+        <description>3. Langham Place, Reclamation St</description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            114.167537,22.319336,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>5. 洗衣街，水務署旺角辦事處</name>
+        <description>5. Water Supplies Dept Mong Kok Office, Sai Yee St</description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            114.171614,22.320602,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>6. 旺角東站公共小巴總站</name>
+        <description>6. Mong Kok East Station PLB Terminus</description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            114.172132,22.321865,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>行車路線(1/3)</name>
+      <Placemark>
+        <name>行車路線(1/3)</name>
+        <description>Routeing (1/3)</description>
+        <styleUrl>#line-1267FF-5000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            114.163881,22.315732,0
+            114.163586,22.31706,0
+            114.16347,22.317295,0
+            114.163352,22.31768,0
+            114.163312,22.317767,0
+            114.163232,22.317863,0
+            114.163116,22.317946,0
+            114.162473,22.318308,0
+            114.162367,22.318392,0
+            114.162261,22.318512,0
+            114.162428,22.318804,0
+            114.162478,22.318864,0
+            114.162546,22.318915,0
+            114.162701,22.318961,0
+            114.16287,22.31892,0
+            114.163176,22.318717,0
+            114.165254,22.318747,0
+            114.165475,22.318784,0
+            114.16601,22.318801,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name> </name>
+        <styleUrl>#icon-503-DB4436-nodescd</styleUrl>
+        <Point>
+          <coordinates>
+            114.163876,22.315731,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name> </name>
+        <styleUrl>#icon-503-DB4436-nodescd</styleUrl>
+        <Point>
+          <coordinates>
+            114.166011,22.318763,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>行車路線(3/3)</name>
+      <Placemark>
+        <name>行車路線(3/3)</name>
+        <description>Routeing (3/3)</description>
+        <styleUrl>#line-1267FF-5000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            114.166222,22.318791,0
+            114.167201,22.31896,0
+            114.167587,22.319019,0
+            114.167644,22.319012,0
+            114.167601,22.319201,0
+            114.167488,22.31995,0
+            114.167373,22.320567,0
+            114.16864,22.320772,0
+            114.169085,22.320841,0
+            114.169651,22.320964,0
+            114.171282,22.321278,0
+            114.17143,22.321295,0
+            114.171734,22.319817,0
+            114.172635,22.319983,0
+            114.172494,22.320575,0
+            114.172231,22.320711,0
+            114.172185,22.320749,0
+            114.172157,22.320799,0
+            114.171888,22.32221,0
+            114.171996,22.322257,0
+            114.172074,22.32227,0
+            114.172327,22.322253,0
+            114.172326,22.321882,0
+            114.172312,22.321824,0
+            114.172295,22.321793,0
+            114.172264,22.32178,0
+            114.17219,22.321789,0
+            114.172175,22.32188,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name></name>
+        <styleUrl>#icon-503-DB4436-nodescd</styleUrl>
+        <Point>
+          <coordinates>
+            114.166223,22.318788,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name></name>
+        <styleUrl>#icon-503-DB4436-nodescd</styleUrl>
+        <Point>
+          <coordinates>
+            114.17218,22.32188,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+
+    <Folder>
+      <name>Untitled layer</name>
+      <Placemark>
+        <name>4. 旺角道 ，砵蘭街</name>
+        <styleUrl>#icon-503-DB4436-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            114.168098,22.3206415,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

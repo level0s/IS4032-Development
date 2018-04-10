@@ -476,7 +476,17 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         try {
             Log.d(TAG,mapId);
             if (mapId.equals("M1")){
-                KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.m1, getActivity().getApplicationContext());
+                KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.m1b, getActivity().getApplicationContext());
+                kmlLayer.addLayerToMap();
+                moveCameraToKml(kmlLayer);
+            }
+            if (mapId.equals("M2")){
+                KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.m2, getActivity().getApplicationContext());
+                kmlLayer.addLayerToMap();
+                moveCameraToKml(kmlLayer);
+            }
+            if (mapId.equals("M3")){
+                KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.m3, getActivity().getApplicationContext());
                 kmlLayer.addLayerToMap();
                 moveCameraToKml(kmlLayer);
             }
