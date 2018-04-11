@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/IS4032.iml" filepath="$PROJECT_DIR$/IS4032.iml" />
       <module fileurl="file://$PROJECT_DIR$/IS4032-DevelopmentMinibus.iml" filepath="$PROJECT_DIR$/IS4032-DevelopmentMinibus.iml" />
+      <module fileurl="file://C:\Users\Naida Lo\AndroidStudioProjects\IS4032\IS4032-DevelopmentMinibus.iml" filepath="C:\Users\Naida Lo\AndroidStudioProjects\IS4032\IS4032-DevelopmentMinibus.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
