@@ -14,6 +14,9 @@ public class route_data implements Parcelable {
     private String mRouteNo;
     private String mRouteName;
     private String type;
+    private String MonToFri;
+    private String Sat;
+    private String Sun;
     private List<stop_data> mStopList = new ArrayList<stop_data>();
 
     public route_data(String mRouteID, String mRouteNo, String mRouteName, String type) {
@@ -32,6 +35,9 @@ public class route_data implements Parcelable {
     public String getmRouteID(){return mRouteID;}
     public String getmRouteNo() {return mRouteNo;}
     public String getmRouteName() {return mRouteName;}
+    public String getMonToFri(){return MonToFri;}
+    public String getSat() {return Sat;}
+    public String getSun() {return Sun;}
     public List<stop_data>getmStopList(){return mStopList;}
     public String getType(){return type;}
 
@@ -46,8 +52,9 @@ public class route_data implements Parcelable {
         mRouteNo = in.readString();
         mRouteName = in.readString();
         type = in.readString();
-        //List<stop_data>mStopList = new ArrayList<stop_data>();
-        //in.readList(mStopList,stop_data.class.getClassLoader());
+        MonToFri = in.readString();
+        Sat = in.readString();
+        Sun = in.readString();
         mStopList = in.readArrayList(stop_data.class.getClassLoader());
     }
 
@@ -58,6 +65,9 @@ public class route_data implements Parcelable {
         parcel.writeString(mRouteNo);
         parcel.writeString(mRouteName);
         parcel.writeString(type);
+        parcel.writeString(MonToFri);
+        parcel.writeString(Sat);
+        parcel.writeString(Sun);
         parcel.writeList(mStopList);
     }
 

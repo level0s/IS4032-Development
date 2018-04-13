@@ -120,7 +120,7 @@ public class SplashScreen extends AppCompatActivity {
             Stops.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    allStop.clear();
+                    //allStop.clear();
                     current.clearmStopList();
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         stop_data s = ds.getValue(stop_data.class);
