@@ -1,5 +1,6 @@
 package com.hkminibus.minibus;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -38,6 +39,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
@@ -56,8 +62,6 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
     RecyclerView mRecyclerView;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
     MapFragment mapFragment;
-    Button btn_arrow, btn_waitingIcon;
-    TextView waitingNo;
 
     private GoogleMap mMap;
     //An immutable class that aggregates all camera position parameters such as location, zoom level, tilt angle, and bearing.
@@ -86,8 +90,8 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     public KmlLayer kmlLayer;
-    double currentLat = 0.0;
-    double currentLng = 0.0;
+    public static double currentLat = 0.0;
+    public static double currentLng = 0.0;
 
     private static final String TAG="stopRoute";
 
@@ -119,6 +123,8 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
         //RecyclerView Adapter
         final StopAdapter mStopAdapter = new StopAdapter(getActivity(), stop_main.CStopList);
         mRecyclerView.setAdapter(mStopAdapter);
+        mStopAdapter.notifyDataSetChanged();
+
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -139,7 +145,6 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
         //SupportMapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         return view;
     }
@@ -336,8 +341,6 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
 
     private void moveCameraToKml(KmlLayer kmlLayer) {
 
-
-
         //Retrieve the first container in the KML layer
         KmlContainer container = kmlLayer.getContainers().iterator().next();
         //Retrieve a nested container within the first container
@@ -360,4 +363,5 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
         Log.d(TAG,"kml has input");
 
     }
+
 }

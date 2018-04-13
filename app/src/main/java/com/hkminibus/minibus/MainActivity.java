@@ -1,5 +1,6 @@
 package com.hkminibus.minibus;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,8 +39,8 @@ import static java.lang.Double.parseDouble;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         TabLayout.OnTabSelectedListener{
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mRef = database.getReference();
+    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static DatabaseReference mRef = database.getReference();
 
     public static List<route_data> mRouteData = new ArrayList<>();
     public static List<route_data> allRouteData = new ArrayList<>();
@@ -47,12 +49,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static List<stop_data> allStop = new ArrayList<>();
     public static List<location_data> allLocation = new ArrayList<>();
 
+
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
     private search_by_no fragment1 = new search_by_no();
     private search_by_location fragment2 = new search_by_location();
     //private search_by_location fragment2 = new search_by_location();
+    public static route_data Updated_mRouteData_C ;
+    public static int update_po;
+    public static int requestCode =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         allLocation.addAll(allDistrict);
         allLocation.addAll(allLandmark);
         allLocation.addAll(allStop);
+
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
@@ -135,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return 2;
             }
         });
+
+
+
     }
 
     /*private void addStopList() {
@@ -182,5 +192,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {}
 
+    //When Stop_main back to MainActivity, it will run follow code to update other list about the rank change
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==0){
+
+            Updated_mRouteData_C = data.getParcelableExtra("Updatedrd");
+            update_po = data.getIntExtra("Upostion", stop_main.routeID_no);
+            Log.d("Pasing to Mainlalala", Updated_mRouteData_C + " " + update_po);
+            allRouteData.set(update_po,Updated_mRouteData_C);
+            mRouteData.set(update_po,Updated_mRouteData_C);
+            search_by_no.mRouteDataNo.set(update_po,Updated_mRouteData_C);
+
+
+        }
+    }
 
 }

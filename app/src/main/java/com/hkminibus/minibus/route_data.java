@@ -13,12 +13,14 @@ public class route_data implements Parcelable {
     private String mRouteID;
     private String mRouteNo;
     private String mRouteName;
+    private String type;
     private List<stop_data> mStopList = new ArrayList<stop_data>();
 
-    public route_data(String mRouteID, String mRouteNo, String mRouteName) {
+    public route_data(String mRouteID, String mRouteNo, String mRouteName, String type) {
         this.mRouteID = mRouteID;
         this.mRouteNo = mRouteNo;
         this.mRouteName = mRouteName;
+        this.type = type;
     }
 
     public void setmStopList(stop_data s){
@@ -28,11 +30,10 @@ public class route_data implements Parcelable {
     public route_data(){}
 
     public String getmRouteID(){return mRouteID;}
-    public String getmRouteNo() {
-        return mRouteNo;
-    }
+    public String getmRouteNo() {return mRouteNo;}
     public String getmRouteName() {return mRouteName;}
     public List<stop_data>getmStopList(){return mStopList;}
+    public String getType(){return type;}
 
 
     @Override
@@ -44,6 +45,7 @@ public class route_data implements Parcelable {
         mRouteID = in.readString();
         mRouteNo = in.readString();
         mRouteName = in.readString();
+        type = in.readString();
         //List<stop_data>mStopList = new ArrayList<stop_data>();
         //in.readList(mStopList,stop_data.class.getClassLoader());
         mStopList = in.readArrayList(stop_data.class.getClassLoader());
@@ -55,6 +57,7 @@ public class route_data implements Parcelable {
         parcel.writeString(mRouteID);
         parcel.writeString(mRouteNo);
         parcel.writeString(mRouteName);
+        parcel.writeString(type);
         parcel.writeList(mStopList);
     }
 
@@ -69,5 +72,8 @@ public class route_data implements Parcelable {
             return new route_data[size];
         }
     };
+    public void clearmStopList() {this.mStopList.clear();}
+
+
 }
 
