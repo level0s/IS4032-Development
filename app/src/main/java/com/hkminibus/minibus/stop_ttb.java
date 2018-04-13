@@ -18,7 +18,6 @@ public class stop_ttb extends Fragment {
         super.onCreate(savedInstanceState);
         View view =  inflater.inflate(R.layout.stop_ttb_fragment, container, false);
 
-
         return view;
     }
 

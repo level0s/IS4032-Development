@@ -15,6 +15,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.identity.intents.AddressConstants;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +38,12 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
     private stop_ttb fragment2 = new stop_ttb();
     public static route_data CRouteData;
     public static List<stop_data> CStopList = new ArrayList<>();
+    public static String routeID;
+    public static int clicked = 0;
+    public static int clickedPosition;
+    public static int resetPosition;
+    public static String [] a;
+    public static int routeID_no ;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +58,22 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("C", "YY");
+                Intent i = new Intent(stop_main.this, MainActivity.class);
+                i.putExtra("Uposition", routeID_no);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Updatedrd", CRouteData);
+                i.putExtras(bundle);
+                setResult(RESULT_OK,i);
+                Log.d("Passingfrom !!!!!", "is going passing" + routeID_no + " " + CRouteData);
                 finish();
             }
         });
-        //get the clicked Route Name, No and shop list
+
+        //get the clicked Route Name, No, shop list, routeID
         CRouteData = getIntent().getParcelableExtra("CRouteData");
+        routeID_no =getIntent().getIntExtra("CPosition",1);
+        routeID = CRouteData.getmRouteID();
         String No = CRouteData.getmRouteNo();
         String Name = CRouteData.getmRouteName();
         CStopList = CRouteData.getmStopList();

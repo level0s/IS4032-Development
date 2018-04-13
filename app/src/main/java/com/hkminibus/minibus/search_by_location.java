@@ -76,8 +76,8 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     location_data end;
     ArrayList locationName = new ArrayList();
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-    double currentLat = 0.0;
-    double currentLng = 0.0;
+    public double currentLat = 0.0;
+    public double currentLng = 0.0;
 
     private GoogleMap mMap;
     //An immutable class that aggregates all camera position parameters such as location, zoom level, tilt angle, and bearing.
@@ -258,13 +258,12 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("CRouteData", MainActivity.mRouteData.get(position));// 序列化
                 i.putExtras(bundle);// 发送数据
-                startActivity(i);
+                i.putExtra("CPosition", position);
+                getActivity().startActivityForResult(i, MainActivity.requestCode);
             }
         });
         return view;
     }
-
-
 
     //callback to save the state when the activity pauses:
     @Override

@@ -5,40 +5,60 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground">
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/route_layout"
+    android:layout_width="60dp"
+    android:layout_height="50dp">
 
     <TextView
         android:id="@+id/route_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="409K"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/route_icon"
+        app:layout_constraintEnd_toEndOf="@+id/route_icon"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="@+id/route_icon"
+        app:layout_constraintTop_toTopOf="@+id/route_icon" />
+    <TextView
+        android:id="@+id/route_icon"
         android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
+        android:background="@mipmap/mini_green"
         android:gravity="center"
-        android:text="409K"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/route_name"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/route_no"
-        android:layout_toRightOf="@+id/route_no"
+        android:layout_toEndOf="@+id/route_layout"
+        android:layout_toRightOf="@+id/route_layout"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
         android:text="樂民新邨往旺角站"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/route_no"
+        app:layout_constraintBottom_toBottomOf="@+id/route_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/route_no"
-        app:layout_constraintTop_toTopOf="@+id/route_no" />
+        app:layout_constraintStart_toEndOf="@+id/route_layout"
+        app:layout_constraintTop_toTopOf="@+id/route_layout" />
 
 
 

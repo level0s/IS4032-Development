@@ -36,6 +36,7 @@ import java.util.List;
 public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
     public static List<route_data> mRouteDataNo = new ArrayList<>();
+    public RouteAdapter mRouteAdapter;
     RecyclerView mRecyclerView;
     EditText editText;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -54,11 +55,8 @@ public class search_by_no extends Fragment {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
-
-        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), mRouteDataNo);
+        mRouteAdapter = new RouteAdapter(getActivity(), mRouteDataNo);
         mRecyclerView.setAdapter(mRouteAdapter);
-
-
 
         /** *Select the recyclerView **/
         mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
@@ -70,9 +68,10 @@ public class search_by_no extends Fragment {
                 //i.putExtra("CRouteNo", MainActivity.mRouteData.get(position).getmRouteNo());
                 //i.putExtra("CRouteName", MainActivity.mRouteData.get(position).getmRouteName());
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("CRouteData", mRouteDataNo.get(position));// 序列化
+                bundle.putParcelable("CRouteData", MainActivity.allRouteData.get(position));// 序列化
                 i.putExtras(bundle);// 发送数据
-                startActivity(i);
+                i.putExtra("CPosition", position);
+                getActivity().startActivityForResult(i, MainActivity.requestCode);
 
             }
         });
@@ -97,9 +96,6 @@ public class search_by_no extends Fragment {
                     filter(tempText);
                     mRouteAdapter.notifyDataSetChanged();
                 }
-
-
-
             }
         });
 
@@ -119,6 +115,5 @@ public class search_by_no extends Fragment {
 
          }
     }
-
 }
 

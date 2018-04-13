@@ -21,8 +21,8 @@ import java.util.List;
 public class SplashScreen extends AppCompatActivity {
 
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference mRef = database.getReference();
+    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static DatabaseReference mRef = database.getReference();
 
     public static List<route_data> mRouteData = new ArrayList<>();
     public static List<route_data> allRouteData = new ArrayList<>();
@@ -120,6 +120,8 @@ public class SplashScreen extends AppCompatActivity {
             Stops.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    allStop.clear();
+                    current.clearmStopList();
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         stop_data s = ds.getValue(stop_data.class);
                         current.setmStopList(s);
@@ -134,4 +136,5 @@ public class SplashScreen extends AppCompatActivity {
             });
         }
     }
+
 }

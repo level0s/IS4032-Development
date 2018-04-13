@@ -5,7 +5,7 @@ android {
         minibus {
             keyAlias 'key0'
             keyPassword 'minibus'
-            storeFile file('C:\\Users\\Naida Lo\\AndroidStudioProjects\\IS4032\\keystores\\Minibus.jks')
+            storeFile file('/Users/Jasmine/Desktop/IS4032-Development/keystores/Minibus.jks')
             //C:\Users\Naida Lo\AndroidStudioProjects\IS4032\keystores\Minibus.jks
             ///Users/Jasmine/Desktop/IS4032-Development/keystores/Minibus.jks
             storePassword 'minibus'
@@ -31,6 +31,9 @@ android {
             signingConfig signingConfigs.minibus
         }
     }
+    sourceSets {
+        main { assets.srcDirs = ['src/main/assets', 'src/main/assets/', 'src/main/assets/font'] }
+    }
 }
 
 dependencies {
@@ -46,6 +49,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:cardview-v7:24.0.0'
     implementation 'com.google.android.gms:play-services-maps:11.6.0'
+    compile 'com.google.maps.android:android-maps-utils:0.5+'
 }
 
 

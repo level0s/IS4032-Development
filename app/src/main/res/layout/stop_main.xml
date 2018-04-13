@@ -22,9 +22,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#FF4081">
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <TextView
+
+        <TextView
                 android:id="@+id/stop_route_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +42,8 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@color/red">
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,12 +33,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
 
         TextView mRouteNo;
         TextView mRouteName;
-        RelativeLayout mLayout;
+        TextView mRouteIcon;
+        ConstraintLayout mLayout;
 
         RouteViewHolder(View itemView) {
             super(itemView);
             mRouteNo = (TextView) itemView.findViewById(R.id.route_no);
             mRouteName = (TextView) itemView.findViewById(R.id.route_name);
+            mRouteIcon = (TextView) itemView.findViewById(R.id.route_icon);
+            mLayout = (ConstraintLayout) itemView.findViewById(R.id.route_layout) ;
         }
         public void setValues(route_data mRouteData) {
             mRouteName.setText(mRouteData.getmRouteName());
@@ -68,8 +72,18 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
 
         route_data mRoute = mRouteData.get(position);
         holder.setValues(mRoute);
-        // item click
 
+        //if have RouteNo, which mean it is green minibus
+        if (mRoute.getType().equals("red")) {
+            holder.mRouteIcon.setBackgroundResource(R.mipmap.mini_red);
+            holder.mRouteName.setBackgroundColor(Color.parseColor("#9C1F25"));
+        } else if (mRoute.getType().equals("green")) {
+            holder.mRouteIcon.setBackgroundResource(R.mipmap.mini_green);
+            holder.mRouteName.setBackgroundColor(Color.parseColor("#1C7059"));
+        }
+
+
+        // item click
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,16 +93,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
             });
         }
 
-        /*Tap and go to another page
-                holder.mLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent mIntent = new Intent(mContext, DetailActivity.class);
-                    mIntent.putExtra("sender", holder.mRouteNo.getText().toString());
-                    mIntent.putExtra("title", holder.mRouteName.getText().toString());
-                    mContext.startActivity(mIntent);
-                }
-             });*/
     }
     //得到child的数量
     @Override

@@ -5,8 +5,10 @@ package com.hkminibus.minibus;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,30 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
+import static android.location.Location.distanceBetween;
+import static com.hkminibus.minibus.SplashScreen.database;
 
 public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder> {
 
-    private List<stop_data> mStopList;
+    public List<stop_data> mStopList;
     private Context mContext;
+    int currentNo;
     //private OnItemClickListener mOnItemClickListener;
 
     /** *ViewHolder = RouteViewHolder*/
@@ -54,6 +74,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
     public StopAdapter (Context mContext, List<stop_data> mStopList) {
         this.mStopList = mStopList;
         this.mContext = mContext;
+
     }
 
     //建立 view，並將 view 轉成 ViewHolder
@@ -68,20 +89,19 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
     //将数据绑定到每一个childView中
     @Override
     public void onBindViewHolder(final StopViewHolder holder, final int position) {
-        stop_data mStop = mStopList.get(position);
-        holder.setValues(mStop);
-        //set the waiting no as 0
-        holder.waitingNo.setText("0");
+        final route_data mRoute = new route_data();
+        final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        final Map<String, Object> RankUpdates = new HashMap<>();
 
-        //Click waitingbutton to make the no +1
-        holder.btn_waitingIcon.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Integer currentNo = Integer.parseInt(holder.waitingNo.getText().toString());
-                currentNo = currentNo+1;
-                holder.waitingNo.setText(currentNo.toString());
-            }
-        });
+
+        //set the waiting no and stopname as database shown
+        final stop_data mStop = mStopList.get(position);
+        holder.mStopName.setText(mStop.getName());
+        holder.waitingNo.setText(String.valueOf(mStop.getRank()));
+        int s = position+1;
+        final String stopID = String.valueOf(s < 10 ? "0" : "") + s;
+
+        //holder.setValues(mStop);
 
         //set the time_layout visible after clicking arrow_button
         holder.btn_arrow.setOnClickListener(new View.OnClickListener(){
@@ -95,12 +115,104 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
             }
         });
 
+        //Click waitingbutton to make the no +1
+        holder.btn_waitingIcon.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                float[] dist = new float[1];
+                distanceBetween(mStop.getLatitude(), mStop.getLongitude(), stop_route_page.currentLat, stop_route_page.currentLng, dist);
+                DatabaseReference route_stop = mRef.child("Stop").child(stop_main.routeID).child(stop_main.routeID + "_" + stopID);
+
+                if (dist[0] < 500000) {
+                    if (stop_main.clicked == 0) {
+                        stop_main.clickedPosition = position;
+                        int Rank = Integer.parseInt(holder.waitingNo.getText().toString());
+                        Rank = Rank + 1;
+
+                        //Update firebase the new rank value
+                        RankUpdates.put("rank", Rank);
+                        route_stop.updateChildren(RankUpdates);
+                        notifyDataSetChanged();
+
+                        //Reset the icon waiting No
+                        holder.waitingNo.setText(String.valueOf(mStop.getRank()));
+                        stop_main.clicked = 1;
+                    }
+                    else{
+                        Toast.makeText(mContext, "你已排隊,只可以排隊一次,請長接這按鈕取消排隊", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(mContext, "你的位置不在這站附近", Toast.LENGTH_SHORT).show();
+                    }
+        }});
+
+        holder.btn_waitingIcon.setOnLongClickListener(new View.OnLongClickListener(){
+
+            @Override
+            public boolean onLongClick(View v) {
+                if (stop_main.clicked == 1) {
+                    if (stop_main.clickedPosition == position) {
+                        DatabaseReference route_stop = mRef.child("Stop").child(stop_main.routeID).child(stop_main.routeID + "_" + stopID);
+                        Toast.makeText(mContext, "你已取消排隊", Toast.LENGTH_SHORT).show();
+
+                        int Rank = Integer.parseInt(holder.waitingNo.getText().toString());
+                        Rank = Rank - 1;
+
+                        //Update firebase the new rank value
+                        RankUpdates.put("rank", Rank);
+                        route_stop.updateChildren(RankUpdates);
+                        notifyDataSetChanged();
+
+                        //Reset the icon waiting No
+                        holder.waitingNo.setText(String.valueOf(mStop.getRank()));
+                        stop_main.clicked = 0;
+                        stop_main.clickedPosition= stop_main.resetPosition;
+                        Log.d("!!!!!!!!!!!!!!!!!!!!!", String.valueOf(stop_main.clickedPosition));
+                    }
+                    else{
+                        Toast.makeText(mContext, "請長按你已排隊的站來取消排隊", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return true;
+            }
+        });
+
+        mRef.child("Stop/" + stop_main.routeID).addChildEventListener(new ChildEventListener()  {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                stop_data stopd = dataSnapshot.getValue(stop_data.class);
+                if (previousChildName == null) {
+                        stop_main.CRouteData.getmStopList().set(0, stopd);
+                    }
+                 else {
+                        String[] token = previousChildName.split("_");
+                        int previoudStopID = Integer.parseInt(token[1]) + 1;
+                        String stopid = String.valueOf(previoudStopID < 10 ? "0" : "") + previoudStopID;
+                        String currentChildName = token[0] + "_" + stopid;
+
+                        if (currentChildName.equals(stop_main.routeID + "_" + stopID)) {
+                            stop_main.CRouteData.getmStopList().set(position, stopd);
+                            Log.d("positionofroute M2", String.valueOf(stop_main.routeID_no)+ stop_main.CRouteData);
+                        }
+                    }
+                notifyDataSetChanged();
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChildName){}
+            @Override
+            public void onChildMoved(DataSnapshot snapshot, String previousChildName){}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+
+        });
     }
     //得到child的数量
     @Override
     public int getItemCount() {
         return mStopList.size();
     }
-
 
 }
