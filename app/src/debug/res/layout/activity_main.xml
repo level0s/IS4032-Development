@@ -14,20 +14,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="@style/AppTheme.NoActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name">
+            app:popupTheme="@style/AppTheme.AppBarOverlay"
+            android:gravity="center"
+            >
 
         </android.support.v7.widget.Toolbar>
 
@@ -36,18 +38,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/red">
+            android:background="@color/red"
+            app:tabTextColor="@color/colorsplashscreen"
+            app:tabIndicatorHeight="5dp"
+            app:tabSelectedTextColor="@color/colorsplashscreen"
+            android:textSize="15sp">
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="路線搜尋"
-                />
+                android:layout_height="wrap_content" />
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="地點搜尋" />
+                android:layout_height="wrap_content" />
 
         </android.support.design.widget.TabLayout>
 

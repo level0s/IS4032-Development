@@ -6,4 +6,5 @@
     <color name="colorsplashscreen">#FFFFFF</color>
     <color name="red">#9C1F25</color>
     <color name="dark_gray">#696969</color>
+    <color name="grey">#A9A9A9</color>
 </resources>

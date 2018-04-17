@@ -30,9 +30,11 @@
                 android:id="@+id/stop_route_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="?attr/actionBarSize"
                 android:layout_weight="1"
                 android:text="樂民新邨往旺角站"
+                android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
@@ -42,7 +44,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/red">
+            android:background="@color/red"
+            app:tabTextColor="@color/colorsplashscreen"
+            app:tabIndicatorHeight="5dp"
+            app:tabSelectedTextColor="@color/colorsplashscreen"
+            android:textSize="15sp">
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
