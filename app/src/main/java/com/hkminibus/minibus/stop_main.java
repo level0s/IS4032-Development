@@ -42,13 +42,14 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
     public static int clicked = 0;
     public static int clickedPosition;
     public static int resetPosition;
-    public static String [] a;
-    public static int routeID_no ;
+    public static int routeID_no;
+    private static final int[] stop_tab_icon = {
+            R.drawable.tab_stop_0,
+            R.drawable.tab_stop_1};
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stop_main);
-
 
         //添加Toolbar的返回按钮
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
@@ -58,7 +59,6 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("C", "YY");
                 Intent i = new Intent(stop_main.this, MainActivity.class);
                 i.putExtra("Uposition", routeID_no);
                 Bundle bundle = new Bundle();
@@ -106,6 +106,19 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
                 return 2;
             }
         });
+
+        //Set tabitem with icon and name
+        tabLayout.setupWithViewPager(viewPager);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (i==0){
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(MainActivity.getTabView(this,stop_tab_icon,i, "路線" ));
+            }
+            else if(i==1){
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(MainActivity.getTabView(this,stop_tab_icon,i, "時間表" ));
+            }
+        }
     }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {

@@ -111,9 +111,6 @@ public class stop_route_page extends Fragment implements OnMapReadyCallback{
             }
         });
         params.setBehavior(behavior);
-        //btn_waitingIcon = (ImageButton) view.findViewById(R.id.waitingPerson_icon);
-        //waitingNo = (TextView) view.findViewById(R.id.waitingPerson_no);
-        //waitingNo.setText("0");
 
         //RecyclerView divider
         mRecyclerView = (RecyclerView) view.findViewById(R.id.stop_list);

@@ -6,6 +6,7 @@ package com.hkminibus.minibus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,7 +46,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
     /** *ViewHolder = RouteViewHolder*/
     class StopViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mStopName, mIcon, waitingNo, bus16, bus19, time1, time2;
+        TextView mStopName, mIcon, waitingNo, bus16, bus19, time1, time2, full1, full2;
         ImageButton btn_arrow, btn_waitingIcon;
         ConstraintLayout layout;
 
@@ -58,6 +59,8 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
             bus19 = (TextView) itemView.findViewById(R.id.type2);
             time1 = (TextView) itemView.findViewById(R.id.time1);
             time2 = (TextView) itemView.findViewById(R.id.time2);
+            full1 = (TextView) itemView.findViewById(R.id.FULL1);
+            full2 = (TextView) itemView.findViewById(R.id.FULL2);
             btn_waitingIcon = (ImageButton) itemView.findViewById(R.id.waitingPerson_icon);
             waitingNo = (TextView) itemView.findViewById(R.id.waitingPerson_no);
             layout= (ConstraintLayout) itemView.findViewById(R.id.time_layout);
@@ -89,10 +92,8 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
     //将数据绑定到每一个childView中
     @Override
     public void onBindViewHolder(final StopViewHolder holder, final int position) {
-        final route_data mRoute = new route_data();
         final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
         final Map<String, Object> RankUpdates = new HashMap<>();
-
 
         //set the waiting no and stopname as database shown
         final stop_data mStop = mStopList.get(position);
@@ -100,8 +101,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
         holder.waitingNo.setText(String.valueOf(mStop.getRank()));
         int s = position+1;
         final String stopID = String.valueOf(s < 10 ? "0" : "") + s;
-
-        //holder.setValues(mStop);
 
         //set the time_layout visible after clicking arrow_button
         holder.btn_arrow.setOnClickListener(new View.OnClickListener(){
@@ -115,7 +114,9 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
             }
         });
 
-        //Click waitingbutton to make the no +1
+        //Click Rank button to make the no +1
+        //Constraint1: near the bus stop, including 500000m (testing)
+        //Constraint2: cannot click the button more than 1 time
         holder.btn_waitingIcon.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -124,7 +125,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                 DatabaseReference route_stop = mRef.child("Stop").child(stop_main.routeID).child(stop_main.routeID + "_" + stopID);
 
                 if (dist[0] < 500000) {
-                    if (stop_main.clicked == 0) {
+                    if (stop_main.clicked ==0) {
                         stop_main.clickedPosition = position;
                         int Rank = Integer.parseInt(holder.waitingNo.getText().toString());
                         Rank = Rank + 1;
@@ -136,7 +137,11 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
                         //Reset the icon waiting No
                         holder.waitingNo.setText(String.valueOf(mStop.getRank()));
+
+                        //indicate that it hs benn clicked
                         stop_main.clicked = 1;
+                        Log.d("Please", "cg");
+
                     }
                     else{
                         Toast.makeText(mContext, "你已排隊,只可以排隊一次,請長接這按鈕取消排隊", Toast.LENGTH_SHORT).show();
@@ -147,8 +152,8 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                     }
         }});
 
+        //Click long click to delete ranking
         holder.btn_waitingIcon.setOnLongClickListener(new View.OnLongClickListener(){
-
             @Override
             public boolean onLongClick(View v) {
                 if (stop_main.clicked == 1) {
@@ -166,9 +171,10 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
                         //Reset the icon waiting No
                         holder.waitingNo.setText(String.valueOf(mStop.getRank()));
+
                         stop_main.clicked = 0;
                         stop_main.clickedPosition= stop_main.resetPosition;
-                        Log.d("!!!!!!!!!!!!!!!!!!!!!", String.valueOf(stop_main.clickedPosition));
+
                     }
                     else{
                         Toast.makeText(mContext, "請長按你已排隊的站來取消排隊", Toast.LENGTH_SHORT).show();
@@ -178,12 +184,30 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
             }
         });
 
+        //If clicked the button, the button will change color to red
+        //If unclicked, it back to grey
+        if (stop_main.clicked == 0){
+            holder.btn_waitingIcon.setImageResource(R.drawable.grey_wait);
+            holder.waitingNo.setTextColor(Color.parseColor("#696969"));
+        }
+        else if (stop_main.clicked ==1){
+            if (stop_main.clickedPosition == position){
+            holder.btn_waitingIcon.setImageResource(R.drawable.waiting_ppl_icon);
+            holder.waitingNo.setTextColor(Color.parseColor("#9C1F25"));
+            }
+            else {
+                holder.btn_waitingIcon.setImageResource(R.drawable.grey_wait);
+                holder.waitingNo.setTextColor(Color.parseColor("#696969"));
+            }
+        }
+
+        //update the list
         mRef.child("Stop/" + stop_main.routeID).addChildEventListener(new ChildEventListener()  {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                stop_data stopd = dataSnapshot.getValue(stop_data.class);
+                stop_data update = dataSnapshot.getValue(stop_data.class);
                 if (previousChildName == null) {
-                        stop_main.CRouteData.getmStopList().set(0, stopd);
+                        stop_main.CRouteData.getmStopList().set(0, update);
                     }
                  else {
                         String[] token = previousChildName.split("_");
@@ -192,7 +216,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                         String currentChildName = token[0] + "_" + stopid;
 
                         if (currentChildName.equals(stop_main.routeID + "_" + stopID)) {
-                            stop_main.CRouteData.getmStopList().set(position, stopd);
+                            stop_main.CRouteData.getmStopList().set(position, update);
                             Log.d("positionofroute M2", String.valueOf(stop_main.routeID_no)+ stop_main.CRouteData);
                         }
                     }
@@ -208,7 +232,9 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
             public void onCancelled(DatabaseError databaseError) {}
 
         });
+
     }
+
     //得到child的数量
     @Override
     public int getItemCount() {

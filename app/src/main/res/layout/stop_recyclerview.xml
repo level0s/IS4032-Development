@@ -12,7 +12,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/stop_arrow"
+        android:background="@drawable/arrow"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,11 +42,11 @@
 
     <ImageButton
         android:id="@+id/waitingPerson_icon"
-        android:layout_width="39dp"
-        android:layout_height="39dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:layout_marginTop="8dp"
-        android:background="@mipmap/waiting_ppl_icon"
+        android:background="@drawable/grey_wait"
         android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/icon"
         app:layout_constraintEnd_toStartOf="@+id/button_arrow"
@@ -85,14 +85,14 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/time_layout"
-        android:layout_width="160dp"
+        android:layout_width="210dp"
         android:layout_height="91dp"
         android:layout_marginTop="8dp"
         android:scrollbars="none"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/stop_name"
         app:layout_constraintStart_toStartOf="@+id/stop_name"
-        app:layout_constraintTop_toBottomOf="@+id/stop_name"
-        android:visibility="gone">
+        app:layout_constraintTop_toBottomOf="@+id/stop_name">
 
         <TextView
             android:id="@+id/time1"
@@ -139,21 +139,52 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/type1"
             app:layout_constraintTop_toBottomOf="@+id/type1"
-            app:layout_constraintVertical_bias="0.529"/>
+            app:layout_constraintVertical_bias="0.529" />
 
         <TextView
             android:id="@+id/type1"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:background="@mipmap/bus16_icon"
             app:layout_constraintBottom_toTopOf="@+id/type2"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/time1"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/FULL1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="14dp"
+            android:text="FULL"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/FULL2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="23dp"
+            android:text="FULL"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/FULL1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/FULL1"
+            app:layout_constraintTop_toBottomOf="@+id/FULL1"
+            app:layout_constraintVertical_bias="0.0" />
+
     </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>

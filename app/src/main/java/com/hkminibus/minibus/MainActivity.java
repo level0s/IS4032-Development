@@ -1,6 +1,9 @@
 package com.hkminibus.minibus;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,12 +17,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -49,9 +54,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static List<stop_data> allStop = new ArrayList<>();
     public static List<location_data> allLocation = new ArrayList<>();
 
-
+    private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private static final int[] route_tab_icon = {
+            R.drawable.tab_route_0,
+            R.drawable.tab_route_1};
 
     private search_by_no fragment1 = new search_by_no();
     private search_by_location fragment2 = new search_by_location();
@@ -121,6 +129,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ToolbarHelper.addMiddleTitle(this, "Minibus+", toolbar);
+
+
 
         viewPager.addOnPageChangeListener(this);
         tabLayout.addOnTabSelectedListener(this);
@@ -142,6 +157,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return 2;
             }
         });
+
+        //Set tabitem with icon and name
+        tabLayout.setupWithViewPager(viewPager);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            if (i==0){
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(getTabView(this,route_tab_icon,i, "路線搜尋" ));
+            }
+            else if(i==1){
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(getTabView(this,route_tab_icon,i, "地點搜尋" ));
+            }
+        }
 
 
 
@@ -204,9 +232,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             allRouteData.set(update_po,Updated_mRouteData_C);
             mRouteData.set(update_po,Updated_mRouteData_C);
             search_by_no.mRouteDataNo.set(update_po,Updated_mRouteData_C);
-
-
         }
+    }
+    public static View getTabView(Context context,int [] imagelist, int position, String text) {
+        View view = LayoutInflater.from(context).inflate(R.layout.tab_layout, null);
+        ImageView iv_tab = (ImageView) view.findViewById(R.id.iv_tab);
+        TextView tv_tab = (TextView) view.findViewById(R.id.tv_tab);
+        iv_tab.setImageResource(imagelist[position]);
+        tv_tab.setText(text);
+        tv_tab.setTextColor(Color.parseColor("#FFFFFF"));
+        return view;
     }
 
 }
