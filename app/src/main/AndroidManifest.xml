@@ -57,9 +57,12 @@
             android:windowSoftInputMode="adjustNothing"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".on_car"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
             android:name=".stop_main"
             android:screenOrientation="portrait"
-
             android:windowSoftInputMode="adjustNothing"/>
     </application>
 

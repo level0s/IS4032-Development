@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,9 +25,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    public ImageButton imageButton;
+    private String m_Text = "";
     private static final int[] route_tab_icon = {
             R.drawable.tab_route_0,
             R.drawable.tab_route_1};
@@ -70,6 +78,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        /*final Query Minibus = mRef.child("minibus");
+        Minibus.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                allMinibus.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                    district_data mDistrict = ds.getValue(district_data.class);
+                    allDistrict.add(mDistrict);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });*/
+
        /* final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
         Routes.addValueEventListener(new ValueEventListener() {
             @Override
@@ -158,6 +181,37 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
+        /*imageButton = (ImageButton) findViewById(R.id.pinButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("請輸入通關密碼999");
+
+// Set up the input
+                final EditText input = new EditText(getBaseContext());
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_Text = input.getText().toString();
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });*/
         //Set tabitem with icon and name
         tabLayout.setupWithViewPager(viewPager);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {

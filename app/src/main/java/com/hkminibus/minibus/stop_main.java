@@ -142,4 +142,17 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
 
     @Override
     public void onPageScrollStateChanged(int state) {}
+
+    @Override
+    public void onBackPressed(){
+        Log.d("C", "YY");
+        Intent i = new Intent(stop_main.this, MainActivity.class);
+        i.putExtra("Uposition", routeID_no);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("Updatedrd", CRouteData);
+        i.putExtras(bundle);
+        setResult(RESULT_OK,i);
+        Log.d("Passingfrom !!!!!", "is going passing" + routeID_no + " " + CRouteData);
+        finish();
+    }
 }
