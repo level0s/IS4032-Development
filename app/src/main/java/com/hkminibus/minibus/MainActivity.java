@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static int requestCode =0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
 
         final Query Driving = mRef.child("Driving").orderByChild("driving").equalTo(true);
         Driving.addValueEventListener(new ValueEventListener() {
@@ -145,14 +147,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        allStop = getIntent().getBundleExtra("bundle").getParcelableArrayList("allStop");
-        mRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("mRouteData");
-        allRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("allRouteData");
-        allDistrict = getIntent().getBundleExtra("bundle").getParcelableArrayList("allDistrict");
-        allLandmark = getIntent().getBundleExtra("bundle").getParcelableArrayList("allLandmark");
-        allLocation.addAll(allDistrict);
-        allLocation.addAll(allLandmark);
-        allLocation.addAll(allStop);
+            /*allStop = savedInstanceState.getParcelableArrayList("allStop");
+            mRouteData = savedInstanceState.getParcelableArrayList("mRouteData");
+            allRouteData = savedInstanceState.getParcelableArrayList("allRouteData");
+            allDistrict = savedInstanceState.getParcelableArrayList("allDistrict");
+            allLandmark = savedInstanceState.getParcelableArrayList("allLandmark");
+            allLocation.addAll(allDistrict);
+            allLocation.addAll(allLandmark);
+            allLocation.addAll(allStop);*/
+            allStop = getIntent().getBundleExtra("bundle").getParcelableArrayList("allStop");
+            mRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("mRouteData");
+            allRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("allRouteData");
+            allDistrict = getIntent().getBundleExtra("bundle").getParcelableArrayList("allDistrict");
+            allLandmark = getIntent().getBundleExtra("bundle").getParcelableArrayList("allLandmark");
+            allLocation.addAll(allDistrict);
+            allLocation.addAll(allLandmark);
+            allLocation.addAll(allStop);
+
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -185,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        imageButton = (ImageButton) findViewById(R.id.pinButton);
+        /*imageButton = (ImageButton) findViewById(R.id.pinButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                 builder.show();
             }
-        });
+        });*/
 
         //Set tabitem with icon and name
         tabLayout.setupWithViewPager(viewPager);
@@ -330,5 +341,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tv_tab.setTextColor(Color.parseColor("#FFFFFF"));
         return view;
     }
+    //callback to save the state when the activity pauses:
+
 
 }
