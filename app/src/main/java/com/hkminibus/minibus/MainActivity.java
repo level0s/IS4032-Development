@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static List<landmark_data> allLandmark = new ArrayList<>();
     public static List<stop_data> allStop = new ArrayList<>();
     public static List<location_data> allLocation = new ArrayList<>();
+    public static List<driving_mini_data> allDrivingMinibus = new ArrayList<>();
+    public static driving_mini_data matched;
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -79,19 +81,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        /*final Query Minibus = mRef.child("minibus");
-        Minibus.addValueEventListener(new ValueEventListener() {
+        final Query Driving = mRef.child("Driving").orderByChild("driving").equalTo(true);
+        Driving.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                allMinibus.clear();
+                allDrivingMinibus.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren() ){
-                    district_data mDistrict = ds.getValue(district_data.class);
-                    allDistrict.add(mDistrict);
+                    driving_mini_data mMini = ds.getValue(driving_mini_data.class);
+                    allDrivingMinibus.add(mMini);
+                    //Log.v("dataSnapshot", ds.toString());
+                    Log.v("Write", ds.toString());
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });*/
+        });
 
        /* final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
         Routes.addValueEventListener(new ValueEventListener() {
@@ -181,12 +185,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        /*imageButton = (ImageButton) findViewById(R.id.pinButton);
+        imageButton = (ImageButton) findViewById(R.id.pinButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("請輸入通關密碼999");
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("請輸入車牌號碼");
 
 // Set up the input
                 final EditText input = new EditText(getBaseContext());
@@ -197,8 +201,36 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 // Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
+
                         m_Text = input.getText().toString();
+                        matched = new driving_mini_data();
+                        for(driving_mini_data data: allDrivingMinibus){
+                            if (m_Text.matches(data.getmPlateNo())){
+                                if(data.isDriving() == true){
+                                    matched = data;
+                                }
+                            }
+                        }
+                        if(matched.getCarSize() != null){
+
+                            Intent i = new Intent(MainActivity.this ,on_car.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("driving", matched);// 序列化
+                            i.putExtras(bundle);// 发送数据
+                            startActivityForResult(i, requestCode);
+                        } else {
+
+                            AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(MainActivity.this);
+                            dlgAlert.setTitle("這輛小巴現在還沒有行駛");
+                            dlgAlert.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialog.cancel();
+                                }
+                            });
+                            dlgAlert.show();
+                        }
 
                     }
                 });
@@ -211,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                 builder.show();
             }
-        });*/
+        });
+
         //Set tabitem with icon and name
         tabLayout.setupWithViewPager(viewPager);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
