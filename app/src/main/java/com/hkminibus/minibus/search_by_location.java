@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -75,6 +76,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     location_data start;
     location_data end;
     ArrayList locationName = new ArrayList();
+    public static RouteAdapter mRouteAdapter;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
     public double currentLat = 0.0;
     public double currentLng = 0.0;
@@ -190,7 +192,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
-        final RouteAdapter mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
+        mRouteAdapter = new RouteAdapter(getActivity(), MainActivity.mRouteData);
         mRecyclerView.setAdapter(mRouteAdapter);
 
         locationButton.setOnClickListener(new Button.OnClickListener(){
@@ -257,6 +259,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
                 Intent i = new Intent(getActivity(),stop_main.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("CRouteData", MainActivity.mRouteData.get(position));// 序列化
+                bundle.putParcelableArrayList("allOnClicked",(ArrayList<? extends Parcelable>) MainActivity.allOnclicked);
                 i.putExtras(bundle);// 发送数据
                 i.putExtra("CPosition", position);
                 getActivity().startActivityForResult(i, MainActivity.requestCode);

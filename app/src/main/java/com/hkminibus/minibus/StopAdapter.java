@@ -41,6 +41,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
     public List<stop_data> mStopList;
     private Context mContext;
     int currentNo;
+    public static onclick_data onClicked;
     //private OnItemClickListener mOnItemClickListener;
 
     /** *ViewHolder = RouteViewHolder*/
@@ -142,6 +143,38 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                         stop_main.clicked = 1;
                         Log.d("Please", "cg");
 
+                        if (stop_main.allOnCLicked == null || !containsId(stop_main.allOnCLicked,stop_main.CRouteData.getmRouteID())) {
+
+                            onClicked = new onclick_data();
+                            onClicked.setmRouteID(stop_main.CRouteData.getmRouteID());
+                            onClicked.setPosition(stop_main.clickedPosition);
+                            onClicked.setClicked(stop_main.clicked);
+                            stop_main.allOnCLicked.add(onClicked);
+                            for (onclick_data abc : stop_main.allOnCLicked) {
+                                System.out.println(abc.getmRouteID());
+                                System.out.println(abc.getClicked());
+                                System.out.println(abc.getPosition());
+                            }
+                            Log.d("saved", "really");
+
+
+                        }else {
+                            for (onclick_data s : stop_main.allOnCLicked) {
+                                //if the existing elements contains the search input
+                                if (s.getmRouteID().contains(stop_main.CRouteData.getmRouteID())) {
+                                    //adding the element to filtered list
+                                   s.setClicked(stop_main.clicked);
+                                   s.setPosition(stop_main.clickedPosition);
+                                    Log.d("saved","really1");
+                                }
+                            }
+                            for (onclick_data abc : stop_main.allOnCLicked) {
+                                System.out.println(abc.getmRouteID());
+                                System.out.println(abc.getClicked());
+                                System.out.println(abc.getPosition());
+                            }
+                        }
+
                     }
                     else{
                         Toast.makeText(mContext, "你已排隊,只可以排隊一次,請長接這按鈕取消排隊", Toast.LENGTH_SHORT).show();
@@ -174,6 +207,15 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
                         stop_main.clicked = 0;
                         stop_main.clickedPosition= stop_main.resetPosition;
+                        for (onclick_data s : stop_main.allOnCLicked) {
+                            //if the existing elements contains the search input
+                            if (s.getmRouteID().contains(stop_main.CRouteData.getmRouteID())) {
+                                //adding the element to filtered list
+                                s.setClicked(stop_main.clicked);
+                                s.setPosition(stop_main.clickedPosition);
+                                Log.d("cancel","really");
+                            }
+                        }
 
                     }
                     else{
@@ -217,7 +259,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
                         if (currentChildName.equals(stop_main.routeID + "_" + stopID)) {
                             stop_main.CRouteData.getmStopList().set(position, update);
-                            Log.d("positionofroute M2", String.valueOf(stop_main.routeID_no)+ stop_main.CRouteData);
+                           // Log.d("positionofroute M2", String.valueOf(stop_main.routeID_no)+ stop_main.CRouteData);
                         }
                     }
                 notifyDataSetChanged();
@@ -241,4 +283,18 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
         return mStopList.size();
     }
 
+    public static boolean containsId(List<onclick_data> list, String id) {
+        for (onclick_data object : list) {
+            System.out.println(object.getmRouteID());
+            if (object.getmRouteID().equals(id)) {
+                Log.i("eeeee","wowwwwww");
+                return true;
+            }
+
+
+        }
+
+        Log.i("aaaaa","wowwwwww");
+        return false;
+    }
 }

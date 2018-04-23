@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static DatabaseReference mRef = database.getReference();
-
+    public int realposition;
     public static List<route_data> mRouteData = new ArrayList<>();
     public static List<route_data> allRouteData = new ArrayList<>();
     public static List<district_data> allDistrict = new ArrayList<>();
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static List<location_data> allLocation = new ArrayList<>();
     public static List<driving_mini_data> allDrivingMinibus = new ArrayList<>();
     public static driving_mini_data matched;
+    public static List<onclick_data> allOnclicked = new ArrayList<>();
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private search_by_location fragment2 = new search_by_location();
     //private search_by_location fragment2 = new search_by_location();
     public static route_data Updated_mRouteData_C ;
-    public static int update_po;
+    public static String update_po;
     public static int requestCode =0;
 
     @Override
@@ -322,14 +323,29 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode==0){
 
             Updated_mRouteData_C = data.getParcelableExtra("Updatedrd");
-            update_po = data.getIntExtra("Upostion", stop_main.routeID_no);
+            update_po = data.getStringExtra("Uposition");
+            allOnclicked = data.getParcelableArrayListExtra("allOnClicked");
             Log.d("Pasing to Mainlalala", Updated_mRouteData_C + " " + update_po);
-            allRouteData.set(update_po,Updated_mRouteData_C);
-            mRouteData.set(update_po,Updated_mRouteData_C);
-            search_by_no.mRouteDataNo.set(update_po,Updated_mRouteData_C);
+            for (route_data s : allRouteData) {
+                //if the existing elements contains the search input
+                if (s.getmRouteID().equals(update_po)) {
+                    //adding the element to filtered list
+                    realposition = allRouteData.indexOf(s);
+                  System.out.println(realposition);
+                }
+
+            }
+            allRouteData.set(realposition,Updated_mRouteData_C);
+            mRouteData.clear();
+            search_by_no.mRouteDataNo.clear();
+            mRouteData.addAll(allRouteData);
+            search_by_no.mRouteDataNo.addAll(allRouteData);
+            search_by_no.mRouteAdapter1.notifyDataSetChanged();
+            search_by_location.mRouteAdapter.notifyDataSetChanged();
         }
     }
     public static View getTabView(Context context,int [] imagelist, int position, String text) {

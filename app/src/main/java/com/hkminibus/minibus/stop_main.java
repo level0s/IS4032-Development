@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -54,6 +55,7 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
     private String m_Text = "";
     public static List<stop_data> CStopList = new ArrayList<>();
     public static String routeID;
+    public static List<onclick_data> allOnCLicked;
     public static int clicked = 0;
     public static int clickedPosition;
     public static int resetPosition;
@@ -78,15 +80,17 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allDrivingMinibus.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     driving_mini_data mMini = ds.getValue(driving_mini_data.class);
                     allDrivingMinibus.add(mMini);
                     //Log.v("dataSnapshot", ds.toString());
                     Log.v("Write", ds.toString());
                 }
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
 
@@ -94,11 +98,12 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(stop_main.this, MainActivity.class);
-                i.putExtra("Uposition", routeID_no);
+                i.putExtra("Uposition", routeID);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("Updatedrd", CRouteData);
+                bundle.putParcelableArrayList("allOnClicked",(ArrayList<? extends Parcelable>) allOnCLicked);
                 i.putExtras(bundle);
-                setResult(RESULT_OK,i);
+                setResult(RESULT_OK, i);
                 Log.d("Passingfrom !!!!!", "is going passing" + routeID_no + " " + CRouteData);
                 finish();
             }
@@ -106,11 +111,39 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
 
         //get the clicked Route Name, No, shop list, routeID
         CRouteData = getIntent().getParcelableExtra("CRouteData");
-        routeID_no =getIntent().getIntExtra("CPosition",1);
+        routeID_no = getIntent().getIntExtra("CPosition", 1);
+        allOnCLicked = getIntent().getParcelableArrayListExtra("allOnClicked");
         routeID = CRouteData.getmRouteID();
         String No = CRouteData.getmRouteNo();
         String Name = CRouteData.getmRouteName();
         CStopList = CRouteData.getmStopList();
+
+        if (allOnCLicked == null) {
+            clicked = 0;
+            clickedPosition = resetPosition;
+            System.out.println(1111111);
+        }else {
+            clicked = 0;
+            clickedPosition = resetPosition;
+            System.out.println(3333333);
+
+            for (onclick_data s : allOnCLicked) {
+                //if the existing elements contains the search input
+                if (s.getmRouteID().contains(CRouteData.getmRouteID())) {
+                    //adding the element to filtered list
+                    clicked = s.getClicked();
+                    clickedPosition = s.getPosition();
+                    System.out.println(2222222);
+                }
+                System.out.println(s.getmRouteID());
+                System.out.println(s.getClicked());
+                System.out.println(s.getPosition());
+            }
+        }
+
+
+
+
 
         //Set Route Name as toolbar title
         mRouteName = (TextView)findViewById(R.id.stop_route_name);
@@ -240,12 +273,19 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
     public void onBackPressed(){
         Log.d("C", "YY");
         Intent i = new Intent(stop_main.this, MainActivity.class);
-        i.putExtra("Uposition", routeID_no);
+        i.putExtra("Uposition", routeID);
         Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("allOnClicked",(ArrayList<? extends Parcelable>) allOnCLicked);
+        //System.out.println(allOnCLicked.get(0));
         bundle.putParcelable("Updatedrd", CRouteData);
         i.putExtras(bundle);
         setResult(RESULT_OK,i);
         Log.d("Passingfrom !!!!!", "is going passing" + routeID_no + " " + CRouteData);
+        for (onclick_data abc : stop_main.allOnCLicked) {
+            System.out.println(abc.getmRouteID());
+            System.out.println(abc.getClicked());
+            System.out.println(abc.getPosition());
+        }
         finish();
     }
 }

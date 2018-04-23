@@ -28,7 +28,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:text="樂民新邨往旺角站"/>
-
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

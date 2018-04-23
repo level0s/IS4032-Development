@@ -22,6 +22,7 @@ import android.widget.Scroller;
 import android.widget.TextView;
 import android.content.Context;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +37,7 @@ import java.util.List;
 public class search_by_no extends Fragment {
     private static final String TAG="SearchByNo";
     public static List<route_data> mRouteDataNo = new ArrayList<>();
-    public RouteAdapter mRouteAdapter;
+    public static RouteAdapter mRouteAdapter1;
     RecyclerView mRecyclerView;
     EditText editText;
     LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -55,11 +56,11 @@ public class search_by_no extends Fragment {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
-        mRouteAdapter = new RouteAdapter(getActivity(), mRouteDataNo);
-        mRecyclerView.setAdapter(mRouteAdapter);
+        mRouteAdapter1 = new RouteAdapter(getActivity(), mRouteDataNo);
+        mRecyclerView.setAdapter(mRouteAdapter1);
 
         /** *Select the recyclerView **/
-        mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
+        mRouteAdapter1.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d("C", "YY");
@@ -68,7 +69,8 @@ public class search_by_no extends Fragment {
                 //i.putExtra("CRouteNo", MainActivity.mRouteData.get(position).getmRouteNo());
                 //i.putExtra("CRouteName", MainActivity.mRouteData.get(position).getmRouteName());
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("CRouteData", MainActivity.allRouteData.get(position));// 序列化
+                bundle.putParcelable("CRouteData", mRouteDataNo.get(position));// 序列化
+                bundle.putParcelableArrayList("allOnClicked",(ArrayList<? extends  Parcelable>) MainActivity.allOnclicked);
                 i.putExtras(bundle);// 发送数据
                 i.putExtra("CPosition", position);
                 getActivity().startActivityForResult(i, MainActivity.requestCode);
@@ -90,11 +92,11 @@ public class search_by_no extends Fragment {
                 if (tempText.matches("")) {
                     mRouteDataNo.clear();
                     mRouteDataNo.addAll(MainActivity.allRouteData);
-                    mRouteAdapter.notifyDataSetChanged();
+                    mRouteAdapter1.notifyDataSetChanged();
                     Log.d("dd","have");
                 } else {
                     filter(tempText);
-                    mRouteAdapter.notifyDataSetChanged();
+                    mRouteAdapter1.notifyDataSetChanged();
                 }
             }
         });
