@@ -73,6 +73,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     AutoCompleteTextView editEnd;
     ImageButton searchButton;
     ImageButton locationButton;
+    ImageButton locationButton2;
     location_data start;
     location_data end;
     ArrayList locationName = new ArrayList();
@@ -189,6 +190,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         });
         searchButton = (ImageButton) view.findViewById(R.id.searchButton);
         locationButton = (ImageButton) view.findViewById(R.id.locationButton);
+        locationButton2 = (ImageButton) view.findViewById(R.id.locationButton2);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerDecoration(this.getContext(),DividerDecoration.VERTICAL_LIST));
 
@@ -199,6 +201,12 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 editStart.setText("目前位置");
+            }
+        });
+        locationButton2.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                editEnd.setText("目前位置");
             }
         });
 

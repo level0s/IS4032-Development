@@ -134,5 +134,15 @@
         app:layout_constraintTop_toTopOf="@+id/editStart"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
+    <ImageButton
+        android:id="@+id/locationButton2"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editEnd"
+        app:layout_constraintEnd_toEndOf="@+id/editEnd"
+        app:layout_constraintTop_toTopOf="@+id/editEnd"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
 
 </android.support.constraint.ConstraintLayout>

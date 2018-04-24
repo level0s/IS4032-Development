@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,10 +28,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import com.google.maps.DirectionsApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.LatLng;
+import com.google.maps.model.TravelMode;
+
+import org.joda.time.DateTime;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.ContentValues.TAG;
 import static android.location.Location.distanceBetween;
@@ -44,10 +56,17 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
     public static onclick_data onClicked;
     //private OnItemClickListener mOnItemClickListener;
 
+    List<driving_mini_data> cRouteDriving = new ArrayList<>();
+    List<driving_mini_data> tmpCRD = new ArrayList<>();
+    List<Integer> time = new ArrayList<>();
+    List<Boolean> full = new ArrayList<>();
+    List<String> type = new ArrayList<>();
+
+
     /** *ViewHolder = RouteViewHolder*/
     class StopViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mStopName, mIcon, waitingNo, bus16, bus19, time1, time2, full1, full2;
+        TextView mStopName, mIcon, waitingNo, type1, type2, time1, time2, full1, full2;
         ImageButton btn_arrow, btn_waitingIcon;
         ConstraintLayout layout;
 
@@ -56,8 +75,8 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
             btn_arrow = (ImageButton) itemView.findViewById(R.id.button_arrow);
             mStopName = (TextView) itemView.findViewById(R.id.stop_name);
             mIcon = (TextView) itemView.findViewById(R.id.icon);
-            bus16 = (TextView) itemView.findViewById(R.id.type1);
-            bus19 = (TextView) itemView.findViewById(R.id.type2);
+            type1 = (TextView) itemView.findViewById(R.id.type1);
+            type2 = (TextView) itemView.findViewById(R.id.type2);
             time1 = (TextView) itemView.findViewById(R.id.time1);
             time2 = (TextView) itemView.findViewById(R.id.time2);
             full1 = (TextView) itemView.findViewById(R.id.FULL1);
@@ -275,6 +294,141 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
         });
 
+        mRef.child("Driving").addValueEventListener(new ValueEventListener()  {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cRouteDriving.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    driving_mini_data d = ds.getValue(driving_mini_data.class);
+                    if (d.getmRouteName().matches(stop_main.CRouteData.getmRouteName())&&d.isDriving()) {
+                        cRouteDriving.add(d);
+                    }
+                }
+
+                time.clear();
+                full.clear();
+                for (driving_mini_data d : cRouteDriving) {
+                    if(!passed(d,position)){
+                        LatLng origin = new LatLng(d.getLat(), d.getLng());
+                        LatLng destination = new LatLng(mStop.getLatitude(), mStop.getLongitude());
+                        DateTime now = new DateTime();
+                        DirectionsResult result = null;
+                        try {
+                            result = DirectionsApi.newRequest(getGeoContext())
+                                    .mode(TravelMode.DRIVING).origin(origin)
+                                    .destination(destination).departureTime(now)
+                                    .await();
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (result != null) {
+                            time.add((int) (result.routes[0].legs[0].duration.inSeconds / 60));
+                            Log.v("bitch", String.valueOf(result.routes[0].legs[0].duration.inSeconds / 60));
+                            Log.v("bitch", String.valueOf(time.size()));
+                            full.add(d.isFull());
+                            type.add(d.getCarSize());
+                        }
+                    }
+                }
+                switch (time.size()) {
+                    case 0:
+                        holder.time1.setText("目前沒有服務");
+                        holder.time2.setText("");
+                        holder.type1.setBackgroundResource(R.drawable.blank);
+                        holder.full1.setText("");
+                        holder.full2.setText("");
+                        holder.type2.setBackgroundResource(R.drawable.blank);
+                        break;
+                    case 1:
+                        int min = time.get(0);
+                        boolean minFull = full.get(0);
+                        String minType = type.get(0);
+                        for (int i = 1; i < time.size(); i++) {
+                            if (time.get(i) < min) {
+                                min = time.get(i);
+                                minFull = full.get(i);
+                                minType = type.get(i);
+                            }
+                        }
+                        holder.time1.setText("還有" + min + "分鐘");
+                        if (minFull) {
+                            holder.full1.setText("客滿");
+                        } else {
+                            holder.full1.setText("");
+                        }
+                        if (minType.matches("16")) {
+                            holder.type1.setBackgroundResource(R.mipmap.bus16_icon);
+                        } else if (minType.matches("19")){
+                            holder.type1.setBackgroundResource(R.mipmap.bus19_icon);
+                        }
+                        holder.time2.setText("");
+                        holder.full2.setText("");
+                        holder.type2.setBackgroundResource(R.drawable.blank);
+                        break;
+                    default:
+                        int min1 = time.get(0);
+                        boolean min1Full = full.get(0);
+                        String min1Type = type.get(0);
+                        int min2 = time.get(1);
+                        boolean min2Full = full.get(1);
+                        String min2Type = type.get(1);
+                        if(time.get(1)<time.get(0)){
+                            min1 = time.get(1);
+                            min1Full = full.get(1);
+                            min1Type = type.get(1);
+                            min2 = time.get(0);
+                            min2Full = full.get(0);
+                            min2Type = type.get(0);
+                        }
+                        for (int i=2;i<time.size();i++){
+                            if (time.get(i) < min1)
+                            {
+                                min2 = min1;
+                                min1 = time.get(i);
+                                min2Full = min1Full;
+                                min1Full = full.get(i);
+                                min2Type = min1Type;
+                                min1Type = type.get(i);
+                            }else if (time.get(i)<min2){
+                                min2 = time.get(i);
+                                min2Full = full.get(i);
+                                min2Type = type.get(i);
+                            }
+                        }
+                        holder.time1.setText("還有" + min1 + "分鐘");
+                        holder.time2.setText("還有" + min2 + "分鐘");
+                        if (min1Full) {
+                            holder.full1.setText("客滿");
+                        } else {
+                            holder.full1.setText("");
+                        }
+                        if (min2Full) {
+                            holder.full2.setText("客滿");
+                        } else {
+                            holder.full2.setText("");
+                        }
+                        if(min1Type.matches("16")){
+                            holder.type1.setBackgroundResource(R.mipmap.bus16_icon);
+                        }else if(min1Type.matches("19")){
+                            holder.type1.setBackgroundResource(R.mipmap.bus19_icon);
+                        }
+                        if(min2Type.matches("16")){
+                            holder.type2.setBackgroundResource(R.mipmap.bus16_icon);
+                        }else if(min2Type.matches("19")){
+                            holder.type2.setBackgroundResource(R.mipmap.bus19_icon);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     //得到child的数量
@@ -290,11 +444,31 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                 Log.i("eeeee","wowwwwww");
                 return true;
             }
-
-
         }
 
         Log.i("aaaaa","wowwwwww");
         return false;
+    }
+
+    private GeoApiContext getGeoContext() {
+        GeoApiContext geoApiContext = new GeoApiContext();
+        return geoApiContext.setQueryRateLimit(3)
+                .setApiKey("AIzaSyAjAEDSx9VucdwOGv65eo7HgqryPNyAVyA")
+                .setConnectTimeout(5, TimeUnit.SECONDS)
+                .setReadTimeout(5, TimeUnit.SECONDS)
+                .setWriteTimeout(5, TimeUnit.SECONDS);
+    }
+    private boolean passed(driving_mini_data d, int position){
+        boolean passed = false;
+        int carPosition = 0;
+        for (int i=0;i<mStopList.size();i++) {
+            if (mStopList.get(i).getName().matches(d.getStopName())) {
+                carPosition = i;
+            }
+        }
+        if(carPosition>position){
+            passed = true;
+        }
+        return passed;
     }
 }

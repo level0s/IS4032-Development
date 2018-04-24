@@ -48,7 +48,7 @@ public class search_by_no extends Fragment {
         super.onCreate(savedInstanceState);
         View view =  inflater.inflate(R.layout.search_by_no_fragment, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.route_list);
-
+        mRouteDataNo.clear();
         mRouteDataNo.addAll(MainActivity.allRouteData);
 
         editText = (EditText) view.findViewById(R.id.editText);

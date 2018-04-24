@@ -184,7 +184,8 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
 // Set up the input
                 final EditText input = new EditText(getBaseContext());
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                input.setTextColor(getColor(R.color.dark_gray));
                 builder.setView(input);
 
 // Set up the buttons
@@ -192,7 +193,7 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
 
-                        m_Text = input.getText().toString();
+                        m_Text = input.getText().toString().toUpperCase();
                         matched = new driving_mini_data();
                         for(driving_mini_data data: allDrivingMinibus){
                             if (m_Text.matches(data.getmPlateNo())){

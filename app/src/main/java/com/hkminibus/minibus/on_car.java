@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -68,6 +69,7 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private TextView nextStop;
+    private ImageButton leaveBtn;
     public static driving_mini_data drivingMinibus;
     SupportMapFragment mapFragment;
     private GoogleMap mMap;
@@ -111,8 +113,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
 
         String No = drivingMinibus.getmRouteNo();
         String Name = drivingMinibus.getmRouteName();
-        //String No = currentRoute.getmRouteNo();
-        //String Name = currentRoute.getmRouteName();
         String nextMinibusStop = drivingMinibus.getStopName();
 
         //Set Route Name as toolbar title
@@ -121,8 +121,9 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
         nextStop = (TextView)findViewById(R.id.nextStop);
         nextStop.setText(nextMinibusStop);
 
-
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        //set app bar
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -206,7 +207,7 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(on_car.this);
                 builder.setTitle("是否確定下一站為下車位置？");
 
-// Set up the buttons
+                // Set up the buttons
                 builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
@@ -253,8 +254,13 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                 builder.show();
             }
         });
-
-
+        leaveBtn = (ImageButton) findViewById(R.id.leaveBtn);
+        leaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
     //callback to save the state when the activity pauses:
     @Override

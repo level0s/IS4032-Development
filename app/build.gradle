@@ -5,7 +5,7 @@ android {
         minibus {
             keyAlias 'key0'
             keyPassword 'minibus'
-            storeFile file('/Users/Jasmine/Desktop/IS4032-Development/keystores/Minibus.jks')
+            storeFile file('C:\\Users\\Naida Lo\\AndroidStudioProjects\\IS4032-User\\keystores\\Minibus.jks')
             //C:\Users\Naida Lo\AndroidStudioProjects\IS4032\keystores\Minibus.jks
             ///Users/Jasmine/Desktop/IS4032-Development/keystores/Minibus.jks
             storePassword 'minibus'
@@ -50,6 +50,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.0.0'
     implementation 'com.google.android.gms:play-services-maps:11.6.0'
     compile 'com.google.maps.android:android-maps-utils:0.5+'
+    compile 'com.google.maps:google-maps-services:0.1.20'
 }
 
 

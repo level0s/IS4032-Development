@@ -31,14 +31,15 @@
                 android:id="@+id/pinButton"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="right"
-                app:srcCompat="@drawable/ic_action_name"
+                app:srcCompat="@mipmap/getoff"
+                android:backgroundTint="@color/colorPrimary"
                 android:clickable="true" />
 
         <TextView
                 android:id="@+id/stop_route_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_marginRight="?attr/actionBarSize"
                 android:layout_weight="1"
                 android:text="樂民新邨往旺角站"
