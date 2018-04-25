@@ -65,6 +65,7 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
             R.drawable.tab_stop_0,
             R.drawable.tab_stop_1};
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stop_main);
@@ -85,6 +86,7 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
                     allDrivingMinibus.add(mMini);
                     //Log.v("dataSnapshot", ds.toString());
                     Log.v("Write", ds.toString());
+
                 }
             }
 
@@ -200,6 +202,7 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
                                 if(data.isDriving() == true){
                                     matched = data;
                                 }
+
                             }
                         }
                         if(matched.getCarSize() != null){

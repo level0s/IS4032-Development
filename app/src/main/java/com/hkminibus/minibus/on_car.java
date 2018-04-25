@@ -150,7 +150,21 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                System.out.println(dataSnapshot.getKey());
+                if (dataSnapshot.getValue(driving_mini_data.class).getmPlateNo().equals(drivingMinibus.getmPlateNo())) {
+                    if (dataSnapshot.getValue(driving_mini_data.class).isDriving() == drivingMinibus.isDriving()) {
+                        drivingMinibus = dataSnapshot.getValue(driving_mini_data.class);
+                        key = dataSnapshot.getKey();
+                        Log.d("hi", "2");
+                        nextStop.setText(drivingMinibus.getStopName());
+                        if(drivingMinibus.isNextStop() == true){
+                            nextStop.setTextColor(getColor(R.color.red));
+                        } else {
+                            nextStop.setTextColor(getColor(R.color.grey));
+                        }
+                        setMarker(drivingMinibus);
+
+                    }
+                }
                 Log.d("hi","1");
             }
 
@@ -168,7 +182,7 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                         key = dataSnapshot.getKey();
                         Log.d("hi", "2");
                         nextStop.setText(drivingMinibus.getStopName());
-                        if(drivingMinibus.isFull() == true){
+                        if(drivingMinibus.isNextStop() == true){
                             nextStop.setTextColor(getColor(R.color.red));
                         } else {
                             nextStop.setTextColor(getColor(R.color.grey));
