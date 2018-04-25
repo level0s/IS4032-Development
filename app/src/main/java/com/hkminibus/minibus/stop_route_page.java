@@ -53,10 +53,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-/**
- * Created by Jasmine on 27/3/2018.
- */
-
 public class stop_route_page extends Fragment implements OnMapReadyCallback{
 
     RecyclerView mRecyclerView;

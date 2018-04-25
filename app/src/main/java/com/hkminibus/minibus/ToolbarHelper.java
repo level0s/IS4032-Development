@@ -7,9 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.widget.TextView;
 
-/**
- * Created by Jasmine on 13/4/2018.
- */
 
 public class ToolbarHelper {
 

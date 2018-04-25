@@ -154,7 +154,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                     if (dataSnapshot.getValue(driving_mini_data.class).isDriving() == drivingMinibus.isDriving()) {
                         drivingMinibus = dataSnapshot.getValue(driving_mini_data.class);
                         key = dataSnapshot.getKey();
-                        Log.d("hi", "2");
                         nextStop.setText(drivingMinibus.getStopName());
                         if(drivingMinibus.isNextStop() == true){
                             nextStop.setTextColor(getColor(R.color.red));
@@ -165,7 +164,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
 
                     }
                 }
-                Log.d("hi","1");
             }
 
             @Override
@@ -180,7 +178,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                     if (dataSnapshot.getValue(driving_mini_data.class).isDriving() == drivingMinibus.isDriving()) {
                         drivingMinibus = dataSnapshot.getValue(driving_mini_data.class);
                         key = dataSnapshot.getKey();
-                        Log.d("hi", "2");
                         nextStop.setText(drivingMinibus.getStopName());
                         if(drivingMinibus.isNextStop() == true){
                             nextStop.setTextColor(getColor(R.color.red));
@@ -198,13 +195,11 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 System.out.println(dataSnapshot.getKey());
-                Log.d("hi","3");
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 System.out.println(dataSnapshot.getKey());
-                Log.d("hi","4");
             }
 
             @Override
@@ -243,7 +238,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                             Boolean confirm_off_car =true;
                             off_car_update.put("nextStop", confirm_off_car );
                             off_car.updateChildren(off_car_update);
-                            Log.d("finished","off_car");
 
                             AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(on_car.this);
                             dlgAlert.setTitle("已通知司機");
@@ -291,12 +285,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        // Prompt the user for permission.
-       // getLocationPermission();
-        // Turn on the My Location layer and the related control on the map.
-       // updateLocationUI();
-        // Get the current location of the device and set the position of the map.
-        //getDeviceLocation();
 
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(miniBusLat,miniBusLat), DEFAULT_ZOOM));
         Log.d(TAG, "camera chingching.");
@@ -334,48 +322,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng),16));
     }
-    //Use the fused location provider to find the device's last-known location, then use that location to position the map.
-    /*private void getDeviceLocation() {
-        try {
-            if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            miniBusLat = drivingMinibus.getLat();
-                            miniBusLng = drivingMinibus.getLng();
-                            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(miniBusLat, miniBusLng), DEFAULT_ZOOM));
-                            Log.d(TAG, "camera should be moved.");
-                        } else {
-                            Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s getresult", task.getException());
-                            //mMap.moveCamera(CameraUpdateFactory
-                            //      .newLatLngZoom(mDefaultLocation, 10));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                        }
-                    }
-
-                });
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %strycatch", e.getMessage());
-        }
-    }*/
-
-    /*private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -391,27 +337,8 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
                 }
             }
         }
-        //updateLocationUI();
     }
-    /*
-    private void updateLocationUI() {
-        if (mMap == null) {
-            return;
-        }
-        try {
-            if (mLocationPermissionGranted) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
-               // getLocationPermission();
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %sui", e.getMessage());
-        }
-    }*/
+
     public void searchKMLFile (String mapId) {
         try {
             retrieveFileFromResource(mapId);
@@ -476,7 +403,6 @@ public class on_car extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     public void onBackPressed(){
-        Log.d("C", "YY");
         finish();
     }
 }

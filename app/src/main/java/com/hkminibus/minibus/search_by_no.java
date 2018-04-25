@@ -65,9 +65,6 @@ public class search_by_no extends Fragment {
             public void onItemClick(View view, int position) {
                 Log.d("C", "YY");
                 Intent i = new Intent(getActivity(),stop_main.class);
-                //i.putExtra("CRouteID", MainActivity.mRouteData.get(position).getmRouteID());
-                //i.putExtra("CRouteNo", MainActivity.mRouteData.get(position).getmRouteNo());
-                //i.putExtra("CRouteName", MainActivity.mRouteData.get(position).getmRouteName());
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("CRouteData", mRouteDataNo.get(position));// 序列化
                 bundle.putParcelableArrayList("allOnClicked",(ArrayList<? extends  Parcelable>) MainActivity.allOnclicked);
@@ -93,7 +90,6 @@ public class search_by_no extends Fragment {
                     mRouteDataNo.clear();
                     mRouteDataNo.addAll(MainActivity.allRouteData);
                     mRouteAdapter1.notifyDataSetChanged();
-                    Log.d("dd","have");
                 } else {
                     filter(tempText);
                     mRouteAdapter1.notifyDataSetChanged();

@@ -27,8 +27,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
 
     private OnItemClickListener mOnItemClickListener;
 
-    /** *ViewHolder = RouteViewHolder*/
-    //no public and final before luke change
     class RouteViewHolder extends RecyclerView.ViewHolder {
 
         TextView mRouteNo;
@@ -49,27 +47,21 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         }
     }
     /** *adapter = Route Adapter*/
-    //負責把 Dataset 裡面的資料，轉成 view 給 RecyclerView 顯示
     public RouteAdapter(Context mContext, List<route_data> mRouteData) {
         this.mRouteData = mRouteData;
         this.mContext = mContext;
     }
 
-    //建立 view，並將 view 轉成 ViewHolder
-    //创建ChildView
+
     @Override
     public RouteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.recycleview_route,
                 parent, false);
         return new RouteViewHolder(view);
     }
-    //put routedata 顯示在 view
-    //将数据绑定到每一个childView中
+
     @Override
     public void onBindViewHolder(final RouteViewHolder holder, final int position) {
-        //holder.mRouteNo.setText(mRouteData.get(position).getmRouteNo());
-        //holder.mRouteName.setText(mRouteData.get(position).getmRouteName());
-
         route_data mRoute = mRouteData.get(position);
         holder.setValues(mRoute);
 
@@ -94,7 +86,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         }
 
     }
-    //得到child的数量
+
     @Override
     public int getItemCount() {
         return mRouteData.size();

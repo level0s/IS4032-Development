@@ -33,10 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jasmine on 27/3/2018.
- */
-
 public class stop_main extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         TabLayout.OnTabSelectedListener{
 
@@ -70,10 +66,8 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stop_main);
 
-        //添加Toolbar的返回按钮
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
-        //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Query Driving = mRef.child("Driving").orderByChild("driving").equalTo(true);
@@ -84,7 +78,6 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     driving_mini_data mMini = ds.getValue(driving_mini_data.class);
                     allDrivingMinibus.add(mMini);
-                    //Log.v("dataSnapshot", ds.toString());
                     Log.v("Write", ds.toString());
 
                 }
@@ -135,7 +128,6 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
                     //adding the element to filtered list
                     clicked = s.getClicked();
                     clickedPosition = s.getPosition();
-                    System.out.println(2222222);
                 }
                 System.out.println(s.getmRouteID());
                 System.out.println(s.getClicked());
@@ -275,7 +267,6 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
 
     @Override
     public void onBackPressed(){
-        Log.d("C", "YY");
         Intent i = new Intent(stop_main.this, MainActivity.class);
         i.putExtra("Uposition", routeID);
         Bundle bundle = new Bundle();
@@ -285,11 +276,6 @@ public class stop_main extends AppCompatActivity implements ViewPager.OnPageChan
         i.putExtras(bundle);
         setResult(RESULT_OK,i);
         Log.d("Passingfrom !!!!!", "is going passing" + routeID_no + " " + CRouteData);
-        for (onclick_data abc : stop_main.allOnCLicked) {
-            System.out.println(abc.getmRouteID());
-            System.out.println(abc.getClicked());
-            System.out.println(abc.getPosition());
-        }
         finish();
     }
 }

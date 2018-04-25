@@ -9,9 +9,6 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-/**
- * Created by Jasmine on 18/4/2018.
- */
 
 public class driving_mini_data implements Parcelable {
     private String carSize;

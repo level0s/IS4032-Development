@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import static android.location.Location.distanceBetween;
 
 
-//com.google.android.gms.location.locationlistner,googleapiclient.connectioncallbacks, googleapiclient.onconnectionfailedListener
+
 public class search_by_location extends Fragment implements OnMapReadyCallback {
     private static final String TAG="SearchByLocation";
     private boolean isFulllScreen = false;
@@ -110,20 +110,11 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
     private static final String KEY_LOCATION = "location";
     public KmlLayer kmlLayer;
 
-    // 連線與使用Google Services服務
-    //private GoogleApiClient mGoogleApiClient;
-
-   /* private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private LocationRequest mLocationRequest;
-    static public final int REQUEST_LOCATION_PERMISSION = 1;*/
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.activity_main);
         View view =  inflater.inflate(R.layout.search_by_location_fragment, container, false);
         AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.fakeAppBar);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
@@ -152,7 +143,6 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         // Build the map.
-        //SupportMapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -263,7 +253,6 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         mRouteAdapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.d("C", "YY");
                 Intent i = new Intent(getActivity(),stop_main.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("CRouteData", MainActivity.mRouteData.get(position));// 序列化
@@ -314,8 +303,6 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), DEFAULT_ZOOM));
-        Log.d(TAG, "camera should be moved0.");
-        //searchKMLFile();
 
     }
 
@@ -359,12 +346,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
             Log.e("Exception: %strycatch", e.getMessage());
         }
     }
-    /*private void handleNewLocation(Location location) {
-        Log.d(TAG, location.toString());
-    }*/
-    /**
-     * Prompts the user for permission to use the device location.
-     */
+
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -473,10 +455,7 @@ public class search_by_location extends Fragment implements OnMapReadyCallback {
 
     public void searchKMLFile (String mapId) {
         try {
-            //mMap = getMap();
-
             retrieveFileFromResource(mapId);
-            //retrieveFileFromUrl();
         } catch (Exception e) {
             Log.e("Exception caught", e.toString());
         }

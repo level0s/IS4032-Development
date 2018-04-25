@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 for (DataSnapshot ds : dataSnapshot.getChildren() ){
                     driving_mini_data mMini = ds.getValue(driving_mini_data.class);
                     allDrivingMinibus.add(mMini);
-                    //Log.v("dataSnapshot", ds.toString());
                     Log.v("Write", ds.toString());
                 }
             }
@@ -100,62 +99,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-       /* final Query Routes = mRef.child("Route").orderByChild("mRouteNo");
-        Routes.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mRouteData.clear();
-                allRouteData.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
-                    route_data mRoute = ds.getValue(route_data.class);
-                    allRouteData.add(mRoute);
-                }
-                addStopList();
-                mRouteData.addAll(allRouteData);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        final Query Districts = mRef.child("District");
-        Districts.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                allDistrict.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
-                    district_data mDistrict = ds.getValue(district_data.class);
-                    allDistrict.add(mDistrict);
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        final Query Landmarks = mRef.child("Landmark");
-        Landmarks.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                allLandmark.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
-                    landmark_data mLandmark = ds.getValue(landmark_data.class);
-                    allLandmark.add(mLandmark);
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });*/
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-            /*allStop = savedInstanceState.getParcelableArrayList("allStop");
-            mRouteData = savedInstanceState.getParcelableArrayList("mRouteData");
-            allRouteData = savedInstanceState.getParcelableArrayList("allRouteData");
-            allDistrict = savedInstanceState.getParcelableArrayList("allDistrict");
-            allLandmark = savedInstanceState.getParcelableArrayList("allLandmark");
-            allLocation.addAll(allDistrict);
-            allLocation.addAll(allLandmark);
-            allLocation.addAll(allStop);*/
             allStop = getIntent().getBundleExtra("bundle").getParcelableArrayList("allStop");
             mRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("mRouteData");
             allRouteData = getIntent().getBundleExtra("bundle").getParcelableArrayList("allRouteData");
@@ -197,66 +143,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        /*imageButton = (ImageButton) findViewById(R.id.pinButton);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("請輸入車牌號碼");
-
-// Set up the input
-                final EditText input = new EditText(getBaseContext());
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                builder.setView(input);
-
-// Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, int which) {
-
-                        m_Text = input.getText().toString();
-                        matched = new driving_mini_data();
-                        for(driving_mini_data data: allDrivingMinibus){
-                            if (m_Text.matches(data.getmPlateNo())){
-                                if(data.isDriving() == true){
-                                    matched = data;
-                                }
-                            }
-                        }
-                        if(matched.getCarSize() != null){
-
-                            Intent i = new Intent(MainActivity.this ,on_car.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("driving", matched);// 序列化
-                            i.putExtras(bundle);// 发送数据
-                            startActivityForResult(i, requestCode);
-                        } else {
-
-                            AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(MainActivity.this);
-                            dlgAlert.setTitle("這輛小巴現在還沒有行駛");
-                            dlgAlert.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialog.cancel();
-                                }
-                            });
-                            dlgAlert.show();
-                        }
-
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
-            }
-        });*/
-
         //Set tabitem with icon and name
         tabLayout.setupWithViewPager(viewPager);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
@@ -274,31 +160,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     }
 
-    /*private void addStopList() {
-        for (route_data r: allRouteData) {
-            final route_data current = r;
-            String routeID = r.getmRouteID();
-            final Query Stops = mRef.child("Stop/" + routeID);
-            Stops.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        stop_data s = ds.getValue(stop_data.class);
-                        current.setmStopList(s);
-                        if(!allStop.contains(s)){
-                            allStop.add(s);
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-    }*/
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        //TabLayout里的TabItem被选中的时候触发
         viewPager.setCurrentItem(tab.getPosition());
     }
     @Override
@@ -312,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
-        //viewPager滑动之后显示触发
         tabLayout.getTabAt(position).select();
     }
 
@@ -329,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             Updated_mRouteData_C = data.getParcelableExtra("Updatedrd");
             update_po = data.getStringExtra("Uposition");
             allOnclicked = data.getParcelableArrayListExtra("allOnClicked");
-            Log.d("Pasing to Mainlalala", Updated_mRouteData_C + " " + update_po);
             for (route_data s : allRouteData) {
                 //if the existing elements contains the search input
                 if (s.getmRouteID().equals(update_po)) {

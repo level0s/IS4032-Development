@@ -8,10 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * Created by Jasmine on 27/3/2018.
- */
-
 public class stop_ttb extends Fragment {
     private static final String TAG="stopTTB";
 

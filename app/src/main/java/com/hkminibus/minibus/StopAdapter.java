@@ -1,9 +1,5 @@
 package com.hkminibus.minibus;
 
-/**
- * Created by Jasmine on 3/4/2018.
- */
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -93,15 +89,12 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
         }
     }
     /** *adapter = Route Adapter*/
-    //負責把 Dataset 裡面的資料，轉成 view 給 RecyclerView 顯示
     public StopAdapter (Context mContext, List<stop_data> mStopList) {
         this.mStopList = mStopList;
         this.mContext = mContext;
 
     }
 
-    //建立 view，並將 view 轉成 ViewHolder
-    //创建ChildView
     @Override
     public StopViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.stop_recyclerview,
@@ -109,7 +102,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
         return new StopViewHolder(view);
     }
 
-    //将数据绑定到每一个childView中
     @Override
     public void onBindViewHolder(final StopViewHolder holder, final int position) {
         final DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
@@ -160,7 +152,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
                         //indicate that it hs benn clicked
                         stop_main.clicked = 1;
-                        Log.d("Please", "cg");
 
                         if (stop_main.allOnCLicked == null || !containsId(stop_main.allOnCLicked,stop_main.CRouteData.getmRouteID())) {
 
@@ -174,7 +165,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                                 System.out.println(abc.getClicked());
                                 System.out.println(abc.getPosition());
                             }
-                            Log.d("saved", "really");
 
 
                         }else {
@@ -184,7 +174,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                                     //adding the element to filtered list
                                    s.setClicked(stop_main.clicked);
                                    s.setPosition(stop_main.clickedPosition);
-                                    Log.d("saved","really1");
                                 }
                             }
                             for (onclick_data abc : stop_main.allOnCLicked) {
@@ -232,7 +221,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                                 //adding the element to filtered list
                                 s.setClicked(stop_main.clicked);
                                 s.setPosition(stop_main.clickedPosition);
-                                Log.d("cancel","really");
                             }
                         }
 
@@ -278,7 +266,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
 
                         if (currentChildName.equals(stop_main.routeID + "_" + stopID)) {
                             stop_main.CRouteData.getmStopList().set(position, update);
-                           // Log.d("positionofroute M2", String.valueOf(stop_main.routeID_no)+ stop_main.CRouteData);
                         }
                     }
                 notifyDataSetChanged();
@@ -328,8 +315,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
                         }
                         if (result != null) {
                             time.add((int) (result.routes[0].legs[0].duration.inSeconds / 60));
-                            Log.v("bitch", String.valueOf(result.routes[0].legs[0].duration.inSeconds / 60));
-                            Log.v("bitch", String.valueOf(time.size()));
                             full.add(d.isFull());
                             type.add(d.getCarSize());
                         }
@@ -431,7 +416,6 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
         });
     }
 
-    //得到child的数量
     @Override
     public int getItemCount() {
         return mStopList.size();
@@ -441,12 +425,10 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.StopViewHolder
         for (onclick_data object : list) {
             System.out.println(object.getmRouteID());
             if (object.getmRouteID().equals(id)) {
-                Log.i("eeeee","wowwwwww");
                 return true;
             }
         }
 
-        Log.i("aaaaa","wowwwwww");
         return false;
     }
 
